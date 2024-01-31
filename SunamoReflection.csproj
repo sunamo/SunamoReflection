@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.1.10.1</Version>
+    <Version>24.1.24.1</Version>
     <Description>Advanced reflection for faster development</Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,11 +13,10 @@
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Diacritics" Version="3.3.27" />
-    <PackageReference Include="ObjectDumper.NET" Version="4.1.13-pre" />
-    <PackageReference Include="SunamoArgs" Version="24.1.11.1" />
-    <PackageReference Include="SunamoCollectionsGeneric" Version="24.1.10.1" />
-    <PackageReference Include="SunamoObjectDumperNet" Version="24.1.7.1" />
-    <PackageReference Include="YamlDotNet" Version="13.7.1" />
+    <PackageReference Include="ObjectDumper.NET" Version="4.1.15" />
+    <PackageReference Include="SunamoArgs" Version="24.1.24.1" />
+    <PackageReference Include="SunamoStringGetString" Version="24.1.22.1" />
+    <PackageReference Include="SunamoStringShared" Version="24.1.23.9" />
+    <PackageReference Include="YamlDotNet" Version="15.1.0" />
   </ItemGroup>
 </Project>

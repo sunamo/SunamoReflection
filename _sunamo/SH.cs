@@ -1,8 +1,8 @@
-namespace SunamoReflection._sunamo;
+//namespace SunamoReflection._sunamo;
 
-internal class SH
-{
-    internal static Func<object, string> NullToStringOrDefault;
-    internal static Func<string[], string> ConcatIfBeforeHasValue;
-    internal static Func<object, object, string> ListToString;
-}
+//public class SH
+//{
+//    public static Func<object, string> NullToStringOrDefault;
+//    public static Func<string[], string> ConcatIfBeforeHasValue;
+//    public static Func<object, object, string> ListToString;
+//}

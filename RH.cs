@@ -1,6 +1,3 @@
-using SunamoI18N;
-using SunamoI18N.Values;
-
 namespace SunamoReflection;
 
 
@@ -9,8 +6,17 @@ namespace SunamoReflection;
 /// </summary>
 public partial class RH : RHSE
 {
+    public static void SetPropertyToInnerClass<T>(T propertyGroup, XName name, string value)
+    {
+        /*
+        RH.GetValuesOfProperty
+        RH.GetValuesOfProperty2
+        RH.GetValuesOfPropertyOrField
+        */
+        var c = propertyGroup;
 
-
+        //foreach
+    }
 
     #region Copy object
     public static object CopyObject(object input)
@@ -197,13 +203,11 @@ public partial class RH : RHSE
         return v.FullName + AllStrings.dot;
     }
 
-
-
     public static string FullNameOfExecutedCode(MethodBase method)
     {
         string methodName = method.Name;
         string type = method.ReflectedType.Name;
-        return SH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
+        return SHSH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
     }
     #endregion
 

@@ -1,5 +1,6 @@
 //using SunamoReflection.Enums;
 
+
 namespace SunamoReflection;
 public partial class RH
 {
@@ -78,6 +79,21 @@ public partial class RH
         return t1.FullName == "System.RuntimeType" || t1 == t2;
     }
 
+    public static List<string> GetValuesOfConsts(Type type)
+    {
+        var c = GetConsts(type);
+        List<string> vr = new List<string>();
+        foreach (var item in c)
+        {
+            vr.Add(SHSE.NullToStringOrDefault(item.GetValue(null)));
+        }
+        for (int i = 0; i < vr.Count; i++)
+        {
+            vr[i] = vr[i].Trim();
+        }
+        return vr;
+    }
+
     public static Dictionary<string, string> GetValuesOfConsts(Type t, params string[] onlyNames)
     {
         var props = RH.GetConsts(t);
@@ -101,17 +117,7 @@ public partial class RH
     }
 
 
-    public static List<string> GetValuesOfConsts(Type type)
-    {
-        var c = GetConsts(type);
-        List<string> vr = new List<string>();
-        foreach (var item in c)
-        {
-            vr.Add(SH.NullToStringOrDefault(item.GetValue(null)));
-        }
-        CA.Trim(vr);
-        return vr;
-    }
+
 
     public static object GetValueOfProperty(string name, Type type, object instance, bool ignoreCase)
     {
@@ -136,7 +142,7 @@ public partial class RH
     public static string DumpListAsString(DumpAsStringArgs a, bool removeNull = false)
     {
         StringBuilder sb = new StringBuilder();
-        var f = CAG.ToList<object>((IList)a.o);
+        var f = ((List<object>)a.o);
 
         if (removeNull)
         {
@@ -254,9 +260,9 @@ public partial class RH
                 }
             }
 
-            //values.Add(item.Name + AllStrings.cs2 + SH.ListToString(GetValueOfField(item.Name, t, o, false)));
+            //values.Add(item.Name + AllStrings.cs2 + SHGetString.ListToString(GetValueOfField(item.Name, t, o, false)));
 
-            AddValue(values, item.Name, SH.ListToString(GetValueOfField(item.Name, t, o, false), null), onlyValues);
+            AddValue(values, item.Name, SHGetString.ListToString(GetValueOfField(item.Name, t, o, false), null), onlyValues);
         }
 
         return values;
@@ -414,7 +420,7 @@ public partial class RH
 
     private static void AddValue(List<string> values, string name, object value, bool onlyValue)
     {
-        var v = SH.ListToString(value, null);
+        var v = SHGetString.ListToString(value, null);
         if (onlyValue)
         {
             values.Add(v);
@@ -438,7 +444,8 @@ public partial class RH
 
     public static string DumpAsObjectDumperNet(object o)
     {
-        return ObjectDumperNetHelper.Dump(o);
+        //return ObjectDumperNetHelper.Dump(o);
+        return ObjectDumper.Dump(o);
     }
 
     /// <summary>
