@@ -1,4 +1,7 @@
+
 namespace SunamoReflection;
+using SunamoReflection._sunamo;
+
 
 
 /// <summary>
@@ -74,7 +77,7 @@ public partial class RH : RHSE
     {
         if (!typeof(T).IsSerializable)
         {
-            ThrowEx.Custom(sess.i18n(XlfKeys.TheTypeMustBeSerializable) + ". source");
+            throw new Exception(sess.i18n(XlfKeys.TheTypeMustBeSerializable) + ". source");
         }
 
         // Don't serialize a null object, simply return the default for that object
@@ -159,7 +162,7 @@ public partial class RH : RHSE
                 }
 
                 name = name.Replace("get_", string.Empty);
-                AddValue(values, name, value, false);
+                AddValue(values, name, value.ToString(), false);
             }
         }
 
@@ -207,7 +210,7 @@ public partial class RH : RHSE
     {
         string methodName = method.Name;
         string type = method.ReflectedType.Name;
-        return SHSH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
+        return SH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
     }
     #endregion
 

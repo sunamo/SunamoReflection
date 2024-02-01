@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.1.24.1</Version>
+    <Version>24.2.1.2</Version>
     <Description>Advanced reflection for faster development</Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -14,9 +14,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ObjectDumper.NET" Version="4.1.15" />
-    <PackageReference Include="SunamoArgs" Version="24.1.24.1" />
-    <PackageReference Include="SunamoStringGetString" Version="24.1.22.1" />
-    <PackageReference Include="SunamoStringShared" Version="24.1.23.9" />
+    <PackageReference Include="SunamoArgs" Version="24.2.1.3" />
+    <PackageReference Include="SunamoStringGetString" Version="24.2.1.1" />
     <PackageReference Include="YamlDotNet" Version="15.1.0" />
   </ItemGroup>
 </Project>

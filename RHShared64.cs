@@ -1,7 +1,10 @@
+namespace SunamoReflection;
+
+using SunamoStringGetString;
+
 //using SunamoReflection.Enums;
 
 
-namespace SunamoReflection;
 public partial class RH
 {
     static Type type = typeof(ThrowEx);
@@ -262,7 +265,7 @@ public partial class RH
 
             //values.Add(item.Name + AllStrings.cs2 + SHGetString.ListToString(GetValueOfField(item.Name, t, o, false)));
 
-            AddValue(values, item.Name, SHGetString.ListToString(GetValueOfField(item.Name, t, o, false), null), onlyValues);
+            AddValue(values, item.Name, GetValueOfField(item.Name, t, o, false).ToString(), onlyValues);
         }
 
         return values;
@@ -335,7 +338,7 @@ public partial class RH
         if (add)
         {
             var value = GetValue(obj, descriptor);
-            AddValue(values, name, value, onlyValues);
+            AddValue(values, name, value.ToString(), onlyValues);
         }
     }
 
@@ -418,9 +421,9 @@ public partial class RH
 
 
 
-    private static void AddValue(List<string> values, string name, object value, bool onlyValue)
+    private static void AddValue(List<string> values, string name, string v, bool onlyValue)
     {
-        var v = SHGetString.ListToString(value, null);
+        //var v = SHGetString.ListToString(value, null);
         if (onlyValue)
         {
             values.Add(v);

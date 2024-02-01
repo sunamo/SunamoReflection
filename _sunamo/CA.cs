@@ -1,6 +1,8 @@
+namespace SunamoReflection._sunamo;
+
 //namespace SunamoReflection._sunamo;
 
-//public class CA
+//internal class CA
 //{
-//    public static Func<List<string>, List<string>> Trim;
+//    internal static Func<List<string>, List<string>> Trim;
 //}
