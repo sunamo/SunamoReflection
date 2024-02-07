@@ -1,6 +1,11 @@
 
-namespace SunamoReflection;
+using SunamoExceptions.InSunamoIsDerivedFrom;
 using SunamoReflection._sunamo;
+using SunamoValues;
+using SunamoXlfKeys;
+
+namespace SunamoReflection;
+
 
 
 
@@ -77,7 +82,7 @@ public partial class RH : RHSE
     {
         if (!typeof(T).IsSerializable)
         {
-            throw new Exception(sess.i18n(XlfKeys.TheTypeMustBeSerializable) + ". source");
+            throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
         }
 
         // Don't serialize a null object, simply return the default for that object
