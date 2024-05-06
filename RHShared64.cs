@@ -13,7 +13,7 @@ public partial class RH
 
     public static string FullPathCodeEntity(Type t)
     {
-        return t.Namespace + AllStringsSE.dot + t.Name;
+        return t.Namespace + AllStrings.dot + t.Name;
     }
 
     public static Assembly AssemblyWithName(string name)
@@ -195,14 +195,14 @@ public partial class RH
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Consts._3Asterisks);
-            sb.AppendLine(operation + AllStringsSE.space + AllStringsSE.lb + o.Count + AllStringsSE.rb + AllStringsSE.colon);
+            sb.AppendLine(operation + AllStrings.space + AllStrings.lb + o.Count + AllStrings.rb + AllStrings.colon);
 
             sb.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
 
             int i = 0;
             foreach (var item in o)
             {
-                sb.AppendLine(DumpAsString(new DumpAsStringArgs { d = SunamoReflection.Enums.DumpProvider.Reflection, deli = AllStringsSE.swd, o = item, onlyValues = true, onlyNames = a.onlyNames }));
+                sb.AppendLine(DumpAsString(new DumpAsStringArgs { d = SunamoReflection.Enums.DumpProvider.Reflection, deli = AllStrings.swd, o = item, onlyValues = true, onlyNames = a.onlyNames }));
                 i++;
             }
 
@@ -240,7 +240,7 @@ public partial class RH
         {
             a = DumpAsStringHeaderArgs.Default;
         }
-        var dasa = new DumpAsStringArgs { o = tableRowPageNew, deli = AllStringsSE.swd, onlyValues = true, onlyNames = a.onlyNames };
+        var dasa = new DumpAsStringArgs { o = tableRowPageNew, deli = AllStrings.swd, onlyValues = true, onlyNames = a.onlyNames };
         return DumpAsString(dasa);
     }
 
@@ -284,7 +284,7 @@ public partial class RH
         bool isAllNeg = true;
         foreach (var item in onlyNames)
         {
-            if (!item.StartsWith(AllStringsSE.excl))
+            if (!item.StartsWith(AllStrings.excl))
             {
                 isAllNeg = false;
             }
@@ -314,7 +314,7 @@ public partial class RH
         bool add = true;
         var name = descriptor.Name;
 
-        if (onlyNames.Contains(AllStringsSE.excl + name))
+        if (onlyNames.Contains(AllStrings.excl + name))
         {
             return;
         }
@@ -323,7 +323,7 @@ public partial class RH
         {
             if (isAllNeg)
             {
-                if (onlyNames2.Contains(AllStringsSE.excl + name))
+                if (onlyNames2.Contains(AllStrings.excl + name))
                 {
                     add = false;
                 }
@@ -510,14 +510,14 @@ public partial class RH
         foreach (YamlDotNet.Serialization.PropertyDescriptor descriptor in properties)
         {
             name = descriptor.Name;
-            if (dumpAsStringHeaderArgs.onlyNames.Contains(AllStringsSE.excl + name))
+            if (dumpAsStringHeaderArgs.onlyNames.Contains(AllStrings.excl + name))
             {
                 continue;
             }
             ls.Add(name);
         }
 
-        return string.Join(AllStringsSE.swd, ls);
+        return string.Join(AllStrings.swd, ls);
     }
 
     public static string DumpAsString3Dictionary3<T, T2, U>(string operation, Dictionary<T, Dictionary<T2, List<U>>> grouped)
