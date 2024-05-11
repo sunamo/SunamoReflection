@@ -1,4 +1,4 @@
-namespace SunamoReflection._sunamo;
+namespace SunamoReflection;
 
 //namespace SunamoReflection._sunamo;
 

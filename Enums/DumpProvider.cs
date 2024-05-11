@@ -1,4 +1,4 @@
-namespace SunamoReflection.Enums;
+namespace SunamoReflection;
 
 public enum DumpProvider
 {
