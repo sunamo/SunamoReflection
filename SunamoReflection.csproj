@@ -15,22 +15,5 @@
   <ItemGroup>
     <PackageReference Include="ObjectDumper.NET" Version="4.1.15" />
     <PackageReference Include="YamlDotNet" Version="15.1.1" />
-    <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
-    <Compile Include="..\SunamoExtensions\ObjectExtensions.cs" Link="_linked\SunamoExtensions\ObjectExtensions.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\ThrowEx.cs" Link="_linked\SunamoExceptions\OnlyInSE\ThrowEx.cs" />
-    <Compile Include="..\SunamoArgs\DumpAsStringHeaderArgs.cs" Link="_linked\SunamoArgs\DumpAsStringHeaderArgs.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
-    <Compile Include="..\SunamoValues\Consts.cs" Link="_linked\SunamoValues\Consts.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exceptions.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exceptions.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\TranslateAble.cs" Link="_linked\SunamoExceptions\OnlyInSE\TranslateAble.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" />
-    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
-    <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
-    <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
-    <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
-    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\RHSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\RHSE.cs" />
-    <Compile Include="..\SunamoString\SH.cs" Link="_linked\SunamoString\SH.cs" />
-    <Compile Include="..\SunamoExceptions\SHSE.cs" Link="_linked\SunamoExceptions\SHSE.cs" />
-    <Compile Include="..\SunamoArgs\GetMemberArgs.cs" Link="_linked\SunamoArgs\GetMemberArgs.cs" />
   </ItemGroup>
 </Project>
