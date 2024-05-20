@@ -1,6 +1,6 @@
 namespace SunamoReflection;
 
-//namespace SunamoReflection._sunamo;
+//namespace SunamoReflection;
 
 internal class SH
 {

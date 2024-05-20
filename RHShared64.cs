@@ -202,7 +202,7 @@ public partial class RH
             int i = 0;
             foreach (var item in o)
             {
-                sb.AppendLine(DumpAsString(new DumpAsStringArgs { d = SunamoReflection.Enums.DumpProvider.Reflection, deli = AllStrings.swd, o = item, onlyValues = true, onlyNames = a.onlyNames }));
+                sb.AppendLine(DumpAsString(new DumpAsStringArgs { d = DumpProvider.Reflection, deli = AllStrings.swd, o = item, onlyValues = true, onlyNames = a.onlyNames }));
                 i++;
             }
 
