@@ -91,7 +91,8 @@ public partial class RH : RHSE
             return default(T);
         }
 
-        throw new NotImplementedException();
+        ThrowEx.NotImplementedMethod();
+        return default(T);
 
         //IFormatter formatter = new BinaryFormatter();
         //Stream stream = new MemoryStream();

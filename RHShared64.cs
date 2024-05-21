@@ -181,7 +181,7 @@ public partial class RH
         int i = 0;
         foreach (var item in o)
         {
-            throw new NotImplementedException();
+            ThrowEx.NotImplementedMethod();
             //sb.AppendLine(DumpAsString2(name + "#" + i, item));
             //i++;
         }
