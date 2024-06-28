@@ -2,9 +2,9 @@ namespace SunamoReflection;
 
 
 #region For easy copy
-public class GetMemberArgs
+internal class GetMemberArgs
 {
     bool toDelete = false;
-    public bool onlyPublic = true;
+    internal bool onlyPublic = true;
 } 
 #endregion

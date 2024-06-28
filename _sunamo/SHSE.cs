@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SunamoReflection;
-public class SHSE
+internal class SHSE
 {
-    public static string NullToStringOrDefault(object n)
+    internal static string NullToStringOrDefault(object n)
     {
         //return NullToStringOrDefault(n, null);
         return n == null ? " " + Consts.nulled : AllStrings.space + n;

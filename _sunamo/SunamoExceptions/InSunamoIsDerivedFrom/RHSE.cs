@@ -2,7 +2,7 @@ namespace SunamoReflection;
 
 using System.Xml.Serialization;
 
-public class RHSE
+internal class RHSE
 {
     /// <summary>
     ///     Usage: some methods just dump exceptions object
@@ -10,7 +10,7 @@ public class RHSE
     /// <param name="empty"></param>
     /// <param name="output"></param>
     /// <returns></returns>
-    public static string DumpAsXml(object output)
+    internal static string DumpAsXml(object output)
     {
         string objectAsXmlString;
         XmlSerializer xs = new(output.GetType());
@@ -28,7 +28,7 @@ public class RHSE
         }
         return objectAsXmlString;
     }
-    public static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
+    internal static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
     {
         if (children == Types.tString && !a1CanBeString) return false;
         if (children == null) ThrowEx.IsNull("children", children);
@@ -48,7 +48,7 @@ public class RHSE
     ///// Return FieldInfo, so will be useful extract Name etc.
     ///// </summary>
     ///// <param name="type"></param>
-    //public static List<FieldInfo> GetConsts(Type type, GetMemberArgs a = null)
+    //internal static List<FieldInfo> GetConsts(Type type, GetMemberArgs a = null)
     //{
     //    if (a == null)
     //    {
@@ -58,7 +58,7 @@ public class RHSE
     //    if (a.onlyPublic)
     //    {
     //        fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Static |
-    //        // return protected/public but not private
+    //        // return protected/internal but not private
     //        BindingFlags.FlattenHierarchy).ToList();
     //    }
     //    else
