@@ -12,7 +12,7 @@ namespace SunamoReflection;
 /// <summary>
 /// Cant name Reflection because exists System.Reflection
 /// </summary>
-public partial class RH : RHSE
+public partial class RH
 {
     public static void SetPropertyToInnerClass<T>(T propertyGroup, XName name, string value)
     {

@@ -189,7 +189,7 @@ public partial class RH
         return sb.ToString();
     }
 
-    public static string DumpListAsStringOneLine(string operation, IList o, DumpAsStringHeaderArgs a)
+    public static string DumpListAsStringOneLine(string operation, IList o, DumpAsStringHeaderArgsReflection a)
     {
         if (o.Count > 0)
         {
@@ -234,11 +234,11 @@ public partial class RH
     /// <param name="v"></param>
     /// <param name="tableRowPageNew"></param>
     /// <returns></returns>
-    public static string DumpAsString3(object tableRowPageNew, DumpAsStringHeaderArgs a = null)
+    public static string DumpAsString3(object tableRowPageNew, DumpAsStringHeaderArgsReflection a = null)
     {
         if (a == null)
         {
-            a = DumpAsStringHeaderArgs.Default;
+            a = DumpAsStringHeaderArgsReflection.Default;
         }
         var dasa = new DumpAsStringArgs { o = tableRowPageNew, deli = AllStrings.swd, onlyValues = true, onlyNames = a.onlyNames };
         return DumpAsString(dasa);
@@ -472,7 +472,7 @@ public partial class RH
             switch (a.d)
             {
                 case DumpProvider.Xml:
-                    dump = DumpAsXml(a.o);
+                    dump = RHSE.DumpAsXml(a.o);
                     break;
                 case DumpProvider.ObjectDumperNet:
                     return DumpAsObjectDumperNet(a.o);
@@ -500,7 +500,7 @@ public partial class RH
         return DumpAsString(new DumpAsStringArgs { d = DumpProvider.Reflection, o = o });
     }
 
-    private static string NameOfFieldsFromDump(object obj, DumpAsStringHeaderArgs dumpAsStringHeaderArgs)
+    private static string NameOfFieldsFromDump(object obj, DumpAsStringHeaderArgsReflection dumpAsStringHeaderArgs)
     {
         var properties = TypeDescriptor.GetProperties(obj);
         List<string> ls = new List<string>();

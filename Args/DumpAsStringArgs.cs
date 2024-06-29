@@ -3,7 +3,7 @@ namespace SunamoReflection;
 /// <summary>
 /// U��v� se v SunamoReflection+SUnamoLogger
 /// </summary>
-public class DumpAsStringArgs : DumpAsStringHeaderArgs
+public class DumpAsStringArgs : DumpAsStringHeaderArgsReflection
 {
     public string name = string.Empty;
     public object o;
