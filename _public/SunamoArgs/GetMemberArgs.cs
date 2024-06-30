@@ -5,6 +5,6 @@ namespace SunamoReflection;
 public class GetMemberArgs
 {
     bool toDelete = false;
-    internal bool onlyPublic = true;
+    public bool onlyPublic = true;
 }
 #endregion
