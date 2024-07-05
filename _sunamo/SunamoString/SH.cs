@@ -1,4 +1,4 @@
-namespace SunamoReflection;
+namespace SunamoReflection._sunamo.SunamoString;
 
 //namespace SunamoReflection;
 

@@ -1,4 +1,4 @@
-namespace SunamoReflection;
+namespace SunamoReflection._sunamo.SunamoExceptions.InSunamoIsDerivedFrom;
 
 using System.Xml.Serialization;
 

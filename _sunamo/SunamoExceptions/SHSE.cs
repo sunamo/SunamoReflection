@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SunamoReflection;
+namespace SunamoReflection._sunamo.SunamoExceptions;
 internal class SHSE
 {
     internal static string NullToStringOrDefault(object n)

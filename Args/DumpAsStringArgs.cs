@@ -1,4 +1,4 @@
-namespace SunamoReflection;
+namespace SunamoReflection.Args;
 
 /// <summary>
 /// U��v� se v SunamoReflection+SUnamoLogger

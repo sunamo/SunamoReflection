@@ -1,4 +1,4 @@
-﻿namespace SunamoReflection;
+namespace SunamoReflection;
 
 public static class ArrayExtensions
 {
