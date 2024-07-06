@@ -1,17 +1,13 @@
 namespace SunamoReflection._sunamo;
-
-public static class ObjectExtensions
+internal static class ObjectExtensions
 {
     private static readonly MethodInfo CloneMethod = typeof(object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
-
-    public static bool IsPrimitive(this Type type)
+    internal static bool IsPrimitive(this Type type)
     {
         if (type == typeof(string)) return true;
         return type.IsValueType & type.IsPrimitive;
     }
-
-
-    public static object InternalCopy(object originalObject, IDictionary<object, object> visited)
+    internal static object InternalCopy(object originalObject, IDictionary<object, object> visited)
     {
         if (originalObject == null) return null;
         var typeToReflect = originalObject.GetType();
@@ -27,14 +23,12 @@ public static class ObjectExtensions
                 Array clonedArray = (Array)cloneObject;
                 clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
             }
-
         }
         visited.Add(originalObject, cloneObject);
         CopyFields(originalObject, visited, cloneObject, typeToReflect);
         RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
         return cloneObject;
     }
-
     private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect)
     {
         if (typeToReflect.BaseType != null)
@@ -43,7 +37,6 @@ public static class ObjectExtensions
             CopyFields(originalObject, visited, cloneObject, typeToReflect.BaseType, BindingFlags.Instance | BindingFlags.NonPublic, info => info.IsPrivate);
         }
     }
-
     private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
     {
         foreach (FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags))
@@ -55,7 +48,7 @@ public static class ObjectExtensions
             fieldInfo.SetValue(cloneObject, clonedFieldValue);
         }
     }
-    public static T Copy<T>(this T original)
+    internal static T Copy<T>(this T original)
     {
         return ((T)original).Copy();
     }
