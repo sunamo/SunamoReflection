@@ -5,6 +5,12 @@
     <Nullable>enable</Nullable>
     <Version>24.7.1.1</Version>
     <Description>Advanced reflection for faster development</Description>
+    <Authors>www.sunamo.cz</Authors>
+    <Copyright>www.sunamo.cz</Copyright>
+    <PackageProjectUrl>https://sunamo.cz/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sunamo/SunamoReflection.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection</DefineConstants>
