@@ -1,5 +1,5 @@
-namespace SunamoReflection;
 
+namespace SunamoReflection;
 public class RH
 {
     static Type type = typeof(ThrowEx);
@@ -11,7 +11,7 @@ public class RH
     /// <param name="empty"></param>
     /// <param name="output"></param>
     /// <returns></returns>
-    internal static string DumpAsXml(object output)
+    public static string DumpAsXml(object output)
     {
         string objectAsXmlString;
         XmlSerializer xs = new(output.GetType());
@@ -29,7 +29,7 @@ public class RH
         }
         return objectAsXmlString;
     }
-    internal static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
+    public static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
     {
         if (children == Types.tString && !a1CanBeString) return false;
         if (children == null) ThrowEx.IsNull("children", children);
@@ -49,7 +49,7 @@ public class RH
     ///// Return FieldInfo, so will be useful extract Name etc.
     ///// </summary>
     ///// <param name="type"></param>
-    //internal static List<FieldInfo> GetConsts(Type type, GetMemberArgs a = null)
+    //public static List<FieldInfo> GetConsts(Type type, GetMemberArgs a = null)
     //{
     //    if (a == null)
     //    {
@@ -59,7 +59,7 @@ public class RH
     //    if (a.onlyPublic)
     //    {
     //        fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Static |
-    //        // return protected/internal but not private
+    //        // return protected/public but not private
     //        BindingFlags.FlattenHierarchy).ToList();
     //    }
     //    else

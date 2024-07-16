@@ -20,3 +20,6 @@ global using System.Diagnostics;
 global using System.Net;
 global using System.Xml.Serialization;
 global using SunamoReflection._sunamo.SunamoString;
+global using SunamoReflection;
+global using SunamoReflection._sunamo;
+global using SunamoReflection._sunamo.SunamoStringGetLines;
