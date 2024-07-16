@@ -21,7 +21,7 @@ global using SunamoReflection._sunamo.SunamoString;
 global using SunamoReflection._sunamo.SunamoStringGetLines;
 global using SunamoReflection._sunamo.SunamoValues;
 global using SunamoReflection._sunamo.SunamoXlfKeys;
-global using SunamoReflection._sunamo.SunamoExceptions.InSunamoIsDerivedFrom;
+
 global using SunamoReflection._sunamo.SunamoExceptions.OnlyInSE;
 global using SunamoReflection._sunamo.SunamoExceptions._AddedToAllCsproj;
 global using System.Diagnostics;

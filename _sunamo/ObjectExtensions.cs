@@ -1,4 +1,5 @@
 namespace SunamoReflection._sunamo;
+
 internal static class ObjectExtensions
 {
     private static readonly MethodInfo CloneMethod = typeof(object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
