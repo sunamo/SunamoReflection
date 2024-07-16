@@ -19,3 +19,4 @@ global using SunamoReflection._sunamo.SunamoExceptions.OnlyInSE;
 global using System.Diagnostics;
 global using System.Net;
 global using System.Xml.Serialization;
+global using SunamoReflection._sunamo.SunamoString;
