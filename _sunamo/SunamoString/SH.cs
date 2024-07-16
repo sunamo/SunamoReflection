@@ -1,4 +1,4 @@
-namespace SunamoReflection._sunamo.SunamoString;
+//namespace SunamoReflection._sunamo.SunamoString;
 
 internal class SH
 {
@@ -25,5 +25,31 @@ internal class SH
             }
         }
         return result.ToString();
+    }
+
+    internal static string JoinNL(List<string> l)
+    {
+        StringBuilder sb = new();
+        foreach (var item in l) sb.AppendLine(item);
+        var r = string.Empty;
+        r = sb.ToString();
+        return r;
+    }
+    internal static List<string> SplitCharMore(string s, params char[] dot)
+    {
+        return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+    internal static List<string> SplitMore(string s, params string[] dot)
+    {
+        return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+    internal static List<string> SplitNone(string text, params string[] deli)
+    {
+        return text.Split(deli, StringSplitOptions.None).ToList();
+    }
+    internal static string TrimEnd(string name, string ext)
+    {
+        while (name.EndsWith(ext)) return name.Substring(0, name.Length - ext.Length);
+        return name;
     }
 }

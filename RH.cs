@@ -154,7 +154,7 @@ public class RH
         List<string> vr = new List<string>();
         foreach (var item in c)
         {
-            vr.Add(_sunamo.SunamoString.SH.NullToStringOrDefault(item.GetValue(null)));
+            vr.Add(SH.NullToStringOrDefault(item.GetValue(null)));
         }
         for (int i = 0; i < vr.Count; i++)
         {
@@ -976,7 +976,7 @@ public class RH
     {
         string methodName = method.Name;
         string type = method.ReflectedType.Name;
-        return _sunamo.SunamoString.SH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
+        return SH.ConcatIfBeforeHasValue(new string[] { type, AllStrings.dot, methodName, AllStrings.colon });
     }
     #endregion
 
