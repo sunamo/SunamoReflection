@@ -1,16 +1,17 @@
 namespace SunamoReflection.Args;
 
 /// <summary>
-/// U��v� se v SunamoReflection+SUnamoLogger
+///     U��v� se v SunamoReflection+SUnamoLogger
 /// </summary>
 public class DumpAsStringArgs : DumpAsStringHeaderArgsReflection
 {
+    public DumpProvider d = DumpProvider.Yaml;
+    public string deli = " - ";
     public string name = string.Empty;
     public object o;
-    public DumpProvider d = DumpProvider.Yaml;
+
     /// <summary>
-    /// Good for fast comparing objects
+    ///     Good for fast comparing objects
     /// </summary>
     public bool onlyValues;
-    public string deli = " - ";
 }

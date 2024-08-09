@@ -1,11 +1,10 @@
-
 namespace SunamoReflection;
-using SunamoReflection._sunamo;
 
 public static class RHCopy
 {
-    public static Object Copy(Object originalObject)
+    public static object Copy(object originalObject)
     {
-        return ObjectExtensions.InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+        return ObjectExtensions.InternalCopy(originalObject,
+            new Dictionary<object, object>(new ReferenceEqualityComparer()));
     }
 }

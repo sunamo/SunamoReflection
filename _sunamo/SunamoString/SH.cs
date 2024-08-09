@@ -14,16 +14,15 @@ internal class SH
 
     internal static string ConcatIfBeforeHasValue(params string[] className)
     {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < className.Length; i++)
+        var result = new StringBuilder();
+        for (var i = 0; i < className.Length; i++)
         {
-            string even = className[i];
+            var even = className[i];
             if (!string.IsNullOrWhiteSpace(even))
-            {
                 //string odd =
                 result.Append(even + className[++i]);
-            }
         }
+
         return result.ToString();
     }
 
@@ -35,18 +34,22 @@ internal class SH
         r = sb.ToString();
         return r;
     }
+
     internal static List<string> SplitCharMore(string s, params char[] dot)
     {
         return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
+
     internal static List<string> SplitMore(string s, params string[] dot)
     {
         return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
+
     internal static List<string> SplitNone(string text, params string[] deli)
     {
         return text.Split(deli, StringSplitOptions.None).ToList();
     }
+
     internal static string TrimEnd(string name, string ext)
     {
         while (name.EndsWith(ext)) return name.Substring(0, name.Length - ext.Length);

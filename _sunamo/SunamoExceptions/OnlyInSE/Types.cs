@@ -1,9 +1,7 @@
 namespace SunamoReflection._sunamo.SunamoExceptions.OnlyInSE;
 
-
 internal class Types
 {
-
     internal static readonly Type tObject = typeof(object);
     internal static readonly Type tStringBuilder = typeof(StringBuilder);
     internal static readonly Type tIEnumerable = typeof(IEnumerable);
@@ -22,18 +20,28 @@ internal class Types
     internal static readonly Type tDateTime = typeof(DateTime);
     internal static readonly Type tBinary = typeof(byte[]);
     internal static readonly Type tChar = typeof(char);
+
     internal static readonly List<Type> allBasicTypes = new()
-{
-tObject, tString, tStringBuilder, tInt, tDateTime,
-tDouble, tFloat, tChar, tBinary, tByte, tShort, tBinary, tLong, tDecimal, tSbyte, tUshort, tUint, tUlong
-};
+    {
+        tObject, tString, tStringBuilder, tInt, tDateTime,
+        tDouble, tFloat, tChar, tBinary, tByte, tShort, tBinary, tLong, tDecimal, tSbyte, tUshort, tUint, tUlong
+    };
+
     internal static readonly Type list = typeof(IList);
+
     #region Same seria as in DefaultValueForTypeT
+
     internal static readonly Type tBool = typeof(bool);
+
     #region Signed numbers
+
     #endregion
+
     #region Unsigned numbers
+
     #endregion
+
     internal static readonly Type tGuid = typeof(Guid);
+
     #endregion
 }

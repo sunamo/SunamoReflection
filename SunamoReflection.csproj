@@ -1,28 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Version>24.7.16.2</Version>
-    <Description>Advanced reflection for faster development</Description>
-    <Authors>www.sunamo.cz</Authors>
-    <Copyright>www.sunamo.cz</Copyright>
-    <PackageProjectUrl>https://sunamo.cz/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/sunamo/SunamoReflection.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Internal to public</PackageReleaseNotes>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection;SunamoReflection.csproj</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection;SunamoReflection.csproj</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="ObjectDumper.NET" Version="4.1.15" />
-    <PackageReference Include="YamlDotNet" Version="15.1.1" />
-    <None Include="readme.md" Pack="True" PackagePath="." />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>24.7.16.2</Version>
+        <Description>Advanced reflection for faster development</Description>
+        <Authors>www.sunamo.cz</Authors>
+        <Copyright>www.sunamo.cz</Copyright>
+        <PackageProjectUrl>https://sunamo.cz/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/sunamo/SunamoReflection.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <PackageReleaseNotes>Internal to public</PackageReleaseNotes>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection;SunamoReflection.csproj</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection;SunamoReflection.csproj</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="ObjectDumper.NET" Version="4.1.15"/>
+        <PackageReference Include="YamlDotNet" Version="15.1.1"/>
+        <None Include="readme.md" Pack="True" PackagePath="."/>
+    </ItemGroup>
 </Project>
