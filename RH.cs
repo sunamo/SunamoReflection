@@ -1,6 +1,5 @@
-using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
-
 namespace SunamoReflection;
+using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public class RH
 {
@@ -36,7 +35,7 @@ public class RH
 
     public static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
     {
-        if (children == Types.tString && !a1CanBeString) return false;
+        if (children == typeof(string) && !a1CanBeString) return false;
         if (children == null) ThrowEx.IsNull("children", children);
         while (true)
         {
@@ -437,7 +436,7 @@ public class RH
         // When I was serializing ISymbol, execution takes unlimited time here
         //return o.DumpToString(name);
         string dump = null;
-        if (a.o.GetType() == Types.tString)
+        if (a.o.GetType() == typeof(string))
             dump = a.o.ToString();
         else
             switch (a.d)
