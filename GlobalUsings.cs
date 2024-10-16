@@ -12,7 +12,7 @@ global using System.IO;
 global using SunamoReflection.Args;
 global using SunamoReflection.Enums;
 global using SunamoReflection._public.SunamoArgs;
-global using SunamoReflection._sunamo.SunamoValues;
+global using SunamoReflection;
 global using SunamoReflection._sunamo.SunamoExceptions;
 global using System.Diagnostics;
 global using System.Xml.Serialization;

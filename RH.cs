@@ -51,7 +51,7 @@ public class RH
 
     public static string FullPathCodeEntity(Type t)
     {
-        return t.Namespace + AllStrings.dot + t.Name;
+        return t.Namespace + "." + t.Name;
     }
 
     public static Assembly AssemblyWithName(string name)
@@ -197,8 +197,8 @@ public class RH
         if (o.Count > 0)
         {
             var sb = new StringBuilder();
-            sb.AppendLine(Consts._3Asterisks);
-            sb.AppendLine(operation + AllStrings.space + AllStrings.lb + o.Count + AllStrings.rb + AllStrings.colon);
+            sb.AppendLine("***");
+            sb.AppendLine(operation + "" + "(" + o.Count + ")" + ":");
 
             sb.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
 
@@ -208,7 +208,7 @@ public class RH
                 sb.AppendLine(DumpAsString(new DumpAsStringArgs
                 {
                     d = DumpProvider.Reflection,
-                    deli = AllStrings.swd,
+                    deli = "-",
                     o = item,
                     onlyValues = true,
                     onlyNames = a.onlyNames
@@ -216,7 +216,7 @@ public class RH
                 i++;
             }
 
-            sb.AppendLine(Consts._3Asterisks);
+            sb.AppendLine("***");
             return sb.ToString();
         }
 
@@ -248,7 +248,7 @@ public class RH
     {
         if (a == null) a = DumpAsStringHeaderArgsReflection.Default;
         var dasa = new DumpAsStringArgs
-        { o = tableRowPageNew, deli = AllStrings.swd, onlyValues = true, onlyNames = a.onlyNames };
+        { o = tableRowPageNew, deli = "-", onlyValues = true, onlyNames = a.onlyNames };
         return DumpAsString(dasa);
     }
 
@@ -269,7 +269,7 @@ public class RH
                 if (!onlyNames.Contains(item.Name))
                     continue;
 
-            //values.Add(item.Name + AllStrings.cs2 + SHGetString.ListToString(GetValueOfField(item.Name, t, o, false)));
+            //values.Add(item.Name + ":" + SHGetString.ListToString(GetValueOfField(item.Name, t, o, false)));
 
             AddValue(values, item.Name, GetValueOfField(item.Name, t, o, false).ToString(), onlyValues);
         }
@@ -288,7 +288,7 @@ public class RH
 
         var isAllNeg = true;
         foreach (var item in onlyNames)
-            if (!item.StartsWith(AllStrings.excl))
+            if (!item.StartsWith("!"))
                 isAllNeg = false;
 
         if (props.Count == 0)
@@ -312,13 +312,13 @@ public class RH
         var add = true;
         var name = descriptor.Name;
 
-        if (onlyNames.Contains(AllStrings.excl + name)) return;
+        if (onlyNames.Contains("!" + name)) return;
 
         if (onlyNames2.Count > 0)
         {
             if (isAllNeg)
             {
-                if (onlyNames2.Contains(AllStrings.excl + name)) add = false;
+                if (onlyNames2.Contains("!" + name)) add = false;
             }
             else
             {
@@ -477,11 +477,11 @@ public class RH
         foreach (PropertyDescriptor descriptor in properties)
         {
             name = descriptor.Name;
-            if (dumpAsStringHeaderArgs.onlyNames.Contains(AllStrings.excl + name)) continue;
+            if (dumpAsStringHeaderArgs.onlyNames.Contains("!" + name)) continue;
             ls.Add(name);
         }
 
-        return string.Join(AllStrings.swd, ls);
+        return string.Join("-", ls);
     }
 
     public static string DumpAsString3Dictionary3<T, T2, U>(string operation,
@@ -866,14 +866,14 @@ public class RH
 
     public static string FullNameOfClassEndsDot(Type v)
     {
-        return v.FullName + AllStrings.dot;
+        return v.FullName + ".";
     }
 
     public static string FullNameOfExecutedCode(MethodBase method)
     {
         var methodName = method.Name;
         var type = method.ReflectedType.Name;
-        return SH.ConcatIfBeforeHasValue(type, AllStrings.dot, methodName, AllStrings.colon);
+        return SH.ConcatIfBeforeHasValue(type, ".", methodName, ":");
     }
 
     #endregion
