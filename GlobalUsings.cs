@@ -18,3 +18,4 @@ global using System.Xml.Serialization;
 global using SunamoReflection._sunamo.SunamoString;
 global using SunamoReflection._sunamo;
 global using System.Net;
+global using System.Diagnostics.CodeAnalysis;
