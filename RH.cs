@@ -5,8 +5,6 @@ public class RH
 {
     private static Type type = typeof(ThrowEx);
 
-
-
     /// <summary>
     ///     Usage: some methods just dump exceptions object
     /// </summary>
@@ -198,7 +196,7 @@ public class RH
         {
             var sb = new StringBuilder();
             sb.AppendLine("***");
-            sb.AppendLine(operation + "" + "(" + o.Count + ")" + ":");
+            sb.AppendLine(operation + " " + "(" + o.Count + ")" + ":");
 
             sb.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
 
