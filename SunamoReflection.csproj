@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.11.11.1</Version>
+    <Version>24.12.5.1</Version>
     <Description>Advanced reflection for faster development</Description>
     <Authors>www.sunamo.cz</Authors>
     <Copyright>www.sunamo.cz</Copyright>
@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Fix empty string for spaces</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated nuget packages to secured versions</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,8 +22,8 @@
     <DefineConstants>$(DefineConstants);ASYNC;SunamoReflection;SunamoReflection.csproj</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ObjectDumper.NET" Version="4.1.15" />
-    <PackageReference Include="YamlDotNet" Version="15.1.1" />
+    <PackageReference Include="ObjectDumper.NET" Version="4.3.2" />
+    <PackageReference Include="YamlDotNet" Version="16.2.1" />
     <None Include="readme.md" Pack="True" PackagePath="." />
   </ItemGroup>
 </Project>
