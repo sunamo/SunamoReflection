@@ -46,6 +46,20 @@ public class RH
         }
     }
 
+    /// <summary>
+    /// Získá názvy všech properties ve třídě bez ohledu na access modifier.
+    /// Pouze deklarované v třídě, bez jakýchkoliv zděděných. 
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static List<string> GetPropertyNames(object obj)
+    {
+        Type type = obj.GetType();
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+        return properties.Select(d => d.Name).ToList();
+    }
+
 
     public static string FullPathCodeEntity(Type t)
     {
