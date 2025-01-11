@@ -52,9 +52,8 @@ public class RH
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static List<string> GetPropertyNames(object obj)
+    public static List<string> GetPropertyNames(Type type)
     {
-        Type type = obj.GetType();
         PropertyInfo[] properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
         return properties.Select(d => d.Name).ToList();
