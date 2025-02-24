@@ -4,8 +4,6 @@ internal partial class ThrowEx
     internal static bool IsNull(string variableName, object? variable = null)
     { return ThrowIsNotNull(Exceptions.IsNull(FullNameOfExecutedCode(), variableName, variable)); }
 
-    internal static bool IsNullOrEmpty(string argName, string argValue)
-    { return ThrowIsNotNull(Exceptions.IsNullOrWhitespace(FullNameOfExecutedCode(), argName, argValue, true)); }
 
     internal static bool NotImplementedCase(object notImplementedName)
     { return ThrowIsNotNull(Exceptions.NotImplementedCase, notImplementedName); }
@@ -68,21 +66,7 @@ internal partial class ThrowEx
     }
 
     #region For avoid FullNameOfExecutedCode
-    internal static bool ThrowIsNotNull(Exception exception, bool reallyThrow = true)
-    {
-        if (exception != null)
-        {
-            ThrowIsNotNull(exception.Message, reallyThrow);
-            return false;
-        }
-        return true;
-    }
 
-    internal static bool ThrowIsNotNull<A, B>(Func<string, A, B, string?> f, A ex, B message)
-    {
-        string? exc = f(FullNameOfExecutedCode(), ex, message);
-        return ThrowIsNotNull(exc);
-    }
 
     internal static bool ThrowIsNotNull<A>(Func<string, A, string?> f, A ex)
     {
