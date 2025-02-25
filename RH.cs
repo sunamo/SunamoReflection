@@ -288,6 +288,54 @@ public class RH
         return values;
     }
 
+    /// <summary>
+    /// Tato metoda se mi hodila v usysu
+    /// Tam mi dělala StackOverflowException
+    /// </summary>
+    /// <param name="sb"></param>
+    /// <param name="obj"></param>
+    /// <param name="indent"></param>
+    public static void PrintPublicPropertiesRecursively(StringBuilder sb, Type obj, string indent = "  ")
+    {
+        if (obj == null)
+        {
+            return;
+        }
+
+        sb.AppendLine($"{indent}Object Type: {obj.Name}");
+
+        PropertyInfo[] properties = obj.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (PropertyInfo property in properties)
+        {
+            string typeName = property.PropertyType.Name;
+
+            try
+            {
+                //object value = property.GetValue(obj);
+
+
+                //if (value == null)
+                //{
+                //    sb.AppendLine($"{indent}- {property.Name} ({typeName})");
+                //}
+                if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string) || property.PropertyType.IsValueType)
+                {
+                    sb.AppendLine($"{indent}- {property.Name} ({typeName})");
+                }
+                else
+                {
+                    sb.AppendLine($"{indent}- {property.Name} ({typeName}):");
+                    PrintPublicPropertiesRecursively(sb, property.PropertyType, indent + "  ");
+                }
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine($"{indent}- {property.Name} ({typeName}): Error getting value - {ex.Message}");
+            }
+        }
+    }
+
     public static List<string> GetValuesOfProperty2(object obj, List<string> onlyNames, bool onlyValues,
         bool takeVariablesIfThereIsNoProps = true)
     {
