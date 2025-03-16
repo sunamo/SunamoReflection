@@ -146,13 +146,6 @@ public class RH
         return values;
     }
 
-
-    public static object GetValueOfProperty(string name, Type type, object instance, bool ignoreCase)
-    {
-        var pis = type.GetProperties();
-        return GetValue(name, type, instance, pis, ignoreCase, null);
-    }
-
     public static object GetValueOfPropertyOrField(object o, string name)
     {
         var type = o.GetType();
@@ -163,6 +156,20 @@ public class RH
 
         return value;
     }
+    public static object GetValueOfField(string name, Type type, object instance, bool ignoreCase)
+    {
+        var pis = type.GetFields();
+
+        return GetValue(name, type, instance, pis, ignoreCase, null);
+    }
+
+    public static object GetValueOfProperty(string name, Type type, object instance, bool ignoreCase)
+    {
+        var pis = type.GetProperties();
+        return GetValue(name, type, instance, pis, ignoreCase, null);
+    }
+
+
 
     public static string DumpListAsString(DumpAsStringArgs a, bool removeNull = false)
     {
@@ -393,12 +400,6 @@ public class RH
     }
 
 
-    public static object GetValueOfField(string name, Type type, object instance, bool ignoreCase)
-    {
-        var pis = type.GetFields();
-
-        return GetValue(name, type, instance, pis, ignoreCase, null);
-    }
 
     private static object GetValue(object instance, MemberInfo[] property, object v)
     {
