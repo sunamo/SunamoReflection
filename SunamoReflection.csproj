@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>25.1.11.2</Version>
+    <Version>25.3.29.1</Version>
     <Description>Advanced reflection for faster development</Description>
     <Authors>www.sunamo.cz</Authors>
     <Copyright>www.sunamo.cz</Copyright>
@@ -12,14 +12,14 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Type instead of objects</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated nuget to latest versions</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ObjectDumper.NET" Version="4.3.2" />
-    <PackageReference Include="YamlDotNet" Version="16.2.1" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
     <None Include="readme.md" Pack="True" PackagePath="." />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="*" Pack="True" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" Pack="True" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
