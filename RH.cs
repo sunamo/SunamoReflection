@@ -199,16 +199,16 @@ public class RH
     /// <param name="name"></param>
     /// <param name="o"></param>
     /// <returns></returns>
-    public static string DumpListAsString(string name, IList o)
-    {
-        var sb = new StringBuilder();
+    //public static string DumpListAsString(string name, IList o)
+    //{
+    //    var sb = new StringBuilder();
 
-        var i = 0;
-        foreach (var item in o) ThrowEx.NotImplementedMethod();
-        //sb.AppendLine(DumpAsString2(name + "#" + i, item));
-        //i++;
-        return sb.ToString();
-    }
+    //    var i = 0;
+    //    foreach (var item in o) ThrowEx.NotImplementedMethod();
+    //    //sb.AppendLine(DumpAsString2(name + "#" + i, item));
+    //    //i++;
+    //    return sb.ToString();
+    //}
 
     public static string DumpListAsStringOneLine(string operation, IList o, DumpAsStringHeaderArgsReflection a)
     {
@@ -343,8 +343,8 @@ public class RH
         }
     }
 
-    public static List<string> GetValuesOfProperty2(object obj, List<string> onlyNames, bool onlyValues,
-        bool takeVariablesIfThereIsNoProps = true)
+    public static List<string> GetValuesOfProperty2(object obj, List<string> onlyNames, bool onlyValues/*,
+        bool takeVariablesIfThereIsNoProps = true*/)
     {
         var onlyNames2 = onlyNames.ToList();
         var values = new List<string>();
@@ -614,17 +614,17 @@ public class RH
 
     #endregion
 
-    public static void SetPropertyToInnerClass<T>(T propertyGroup, XName name, string value)
-    {
-        /*
-        RH.GetValuesOfProperty
-        RH.GetValuesOfProperty2
-        RH.GetValuesOfPropertyOrField
-        */
-        var c = propertyGroup;
+    //public static void SetPropertyToInnerClass<T>(T propertyGroup, XName name, string value)
+    //{
+    //    /*
+    //    RH.GetValuesOfProperty
+    //    RH.GetValuesOfProperty2
+    //    RH.GetValuesOfPropertyOrField
+    //    */
+    //    var c = propertyGroup;
 
-        //foreach
-    }
+    //    //foreach
+    //}
 
     #region Get types of class
 
