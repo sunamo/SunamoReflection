@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 using SunamoReflection;
 using System.Text;
 
@@ -35,11 +38,11 @@ public class RHTests
     public void PrintPublicPropertiesRecursivelyTest()
     {
         ClassWithSubclasses c = new();
-        StringBuilder sb = new();
+        StringBuilder stringBuilder = new();
 
-        RH.PrintPublicPropertiesRecursively(sb, c.GetType(), "  ");
+        RH.PrintPublicPropertiesRecursively(stringBuilder, c.GetType(), "  ");
 
-        var s = sb.ToString();
+        var text = stringBuilder.ToString();
     }
 
     [Fact]
@@ -60,7 +63,7 @@ public class RHTests
 
         //List<string> onlyNames = new List<string>();
 
-        //var r = string.Join(Environment.NewLine, RH.GetValuesOfPropertyOrField(ft, onlyNames.ToArray()));
+        //var result = string.Join(Environment.NewLine, RH.GetValuesOfPropertyOrField(ft, onlyNames.ToArray()));
 
         //onlyNames.Add("from");
         //var r2 = string.Join(Environment.NewLine, RH.GetValuesOfPropertyOrField(ft, onlyNames.ToArray()));

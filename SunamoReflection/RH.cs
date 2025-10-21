@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoReflection;
 using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
@@ -48,7 +51,7 @@ public class RH
 
     /// <summary>
     /// Získá názvy všech properties ve třídě bez ohledu na access modifier.
-    /// Pouze deklarované v třídě, bez jakýchkoliv zděděných. 
+    /// Pouze deklarované value třídě, bez jakýchkoliv zděděných. 
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
@@ -56,21 +59,21 @@ public class RH
     {
         PropertyInfo[] properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-        return properties.Select(d => d.Name).ToList();
+        return properties.Select(data => data.Name).ToList();
     }
 
 
-    public static string FullPathCodeEntity(Type t)
+    public static string FullPathCodeEntity(Type temp)
     {
-        return t.Namespace + "." + t.Name;
+        return temp.Namespace + "." + temp.Name;
     }
 
     public static Assembly AssemblyWithName(string name)
     {
         var ass = AppDomain.CurrentDomain.GetAssemblies();
-        var result = ass.Where(d => d.GetName().Name == name);
-        if (result.Count() == 0) result = ass.Where(d => d.FullName == name);
-        if (result.Count() == 0) result = ass.Where(d => d.FullName.Contains(name));
+        var result = ass.Where(data => data.GetName().Name == name);
+        if (result.Count() == 0) result = ass.Where(data => data.FullName == name);
+        if (result.Count() == 0) result = ass.Where(data => data.FullName.Contains(name));
         return result.FirstOrDefault();
     }
 
@@ -121,16 +124,16 @@ public class RH
 
     public static List<string> GetValuesOfConsts(Type type)
     {
-        var c = GetConsts(type);
+        var count = GetConsts(type);
         var vr = new List<string>();
-        foreach (var item in c) vr.Add(SH.NullToStringOrDefault(item.GetValue(null)));
+        foreach (var item in count) vr.Add(SH.NullToStringOrDefault(item.GetValue(null)));
         for (var i = 0; i < vr.Count; i++) vr[i] = vr[i].Trim();
         return vr;
     }
 
-    public static Dictionary<string, string> GetValuesOfConsts(Type t, params string[] onlyNames)
+    public static Dictionary<string, string> GetValuesOfConsts(Type temp, params string[] onlyNames)
     {
-        var props = GetConsts(t);
+        var props = GetConsts(temp);
         var values = new Dictionary<string, string>(props.Count);
 
         foreach (var item in props)
@@ -139,7 +142,7 @@ public class RH
                 if (!onlyNames.Contains(item.Name))
                     continue;
 
-            var o = GetValueOfField(item.Name, t, null, false);
+            var o = GetValueOfField(item.Name, temp, null, false);
             values.Add(item.Name, o.ToString());
         }
 
@@ -173,59 +176,59 @@ public class RH
 
     public static string DumpListAsString(DumpAsStringArgs a, bool removeNull = false)
     {
-        var sb = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         var f = (List<object>)a.o;
 
-        if (removeNull) f.RemoveAll(d => d == null);
+        if (removeNull) f.RemoveAll(data => data == null);
 
         if (f.Count > 0)
         {
-            sb.AppendLine(NameOfFieldsFromDump(f.First(), a));
+            stringBuilder.AppendLine(NameOfFieldsFromDump(f.First(), a));
 
             foreach (var item in f)
             {
                 a.o = item;
-                sb.AppendLine(DumpAsString(a));
+                stringBuilder.AppendLine(DumpAsString(a));
             }
         }
 
-        return sb.ToString();
+        return stringBuilder.ToString();
     }
 
     /// <summary>
     ///     DumpAsString2 se mi ztratilo
-    ///     nemůžu ho najít v žádném repu
+    ///     nemůžu ho najít value žádném repu
     /// </summary>
     /// <param name="name"></param>
     /// <param name="o"></param>
     /// <returns></returns>
     //public static string DumpListAsString(string name, IList o)
     //{
-    //    var sb = new StringBuilder();
+    //    var stringBuilder = new StringBuilder();
 
     //    var i = 0;
     //    foreach (var item in o) ThrowEx.NotImplementedMethod();
-    //    //sb.AppendLine(DumpAsString2(name + "#" + i, item));
+    //    //stringBuilder.AppendLine(DumpAsString2(name + "#" + i, item));
     //    //i++;
-    //    return sb.ToString();
+    //    return stringBuilder.ToString();
     //}
 
     public static string DumpListAsStringOneLine(string operation, IList o, DumpAsStringHeaderArgsReflection a)
     {
         if (o.Count > 0)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("***");
-            sb.AppendLine(operation + " " + "(" + o.Count + ")" + ":");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("***");
+            stringBuilder.AppendLine(operation + " " + "(" + o.Count + ")" + ":");
 
-            sb.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
+            stringBuilder.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
 
             var i = 0;
             foreach (var item in o)
             {
-                sb.AppendLine(DumpAsString(new DumpAsStringArgs
+                stringBuilder.AppendLine(DumpAsString(new DumpAsStringArgs
                 {
-                    d = DumpProvider.Reflection,
+                    data = DumpProvider.Reflection,
                     deli = "-",
                     o = item,
                     onlyValues = true,
@@ -234,8 +237,8 @@ public class RH
                 i++;
             }
 
-            sb.AppendLine("***");
-            return sb.ToString();
+            stringBuilder.AppendLine("***");
+            return stringBuilder.ToString();
         }
 
         return string.Empty;
@@ -247,10 +250,10 @@ public class RH
     /////// <param name="v"></param>
     /////// <param name="device"></param>
     /////// <returns></returns>
-    //public static string DumpAsString2(string v, object device)
+    //public static string DumpAsString2(string value, object device)
     //{
-    //    return SunamoExceptions.RH.DumpAsString(v, device);
-    //    //DumpAsString(new DumpAsStringArgs { name = v, o = device, d = DumpProvider.Yaml });
+    //    return SunamoExceptions.RH.DumpAsString(value, device);
+    //    //DumpAsString(new DumpAsStringArgs { name = value, o = device, data = DumpProvider.Yaml });
     //}
 
     /// <summary>
@@ -277,8 +280,8 @@ public class RH
 
     public static List<string> GetValuesOfField(object o, IList<string> onlyNames, bool onlyValues)
     {
-        var t = o.GetType();
-        var props = t.GetFields();
+        var temp = o.GetType();
+        var props = temp.GetFields();
         var values = new List<string>(props.Length);
 
         foreach (var item in props)
@@ -287,29 +290,29 @@ public class RH
                 if (!onlyNames.Contains(item.Name))
                     continue;
 
-            //values.Add(item.Name + ":" + SHGetString.ListToString(GetValueOfField(item.Name, t, o, false)));
+            //values.Add(item.Name + ":" + SHGetString.ListToString(GetValueOfField(item.Name, temp, o, false)));
 
-            AddValue(values, item.Name, GetValueOfField(item.Name, t, o, false).ToString(), onlyValues);
+            AddValue(values, item.Name, GetValueOfField(item.Name, temp, o, false).ToString(), onlyValues);
         }
 
         return values;
     }
 
     /// <summary>
-    /// Tato metoda se mi hodila v usysu
+    /// Tato metoda se mi hodila value usysu
     /// Tam mi dělala StackOverflowException
     /// </summary>
     /// <param name="sb"></param>
     /// <param name="obj"></param>
     /// <param name="indent"></param>
-    public static void PrintPublicPropertiesRecursively(StringBuilder sb, Type obj, string indent = "  ")
+    public static void PrintPublicPropertiesRecursively(StringBuilder stringBuilder, Type obj, string indent = "  ")
     {
         if (obj == null)
         {
             return;
         }
 
-        sb.AppendLine($"{indent}Object Type: {obj.Name}");
+        stringBuilder.AppendLine($"{indent}Object Type: {obj.Name}");
 
         PropertyInfo[] properties = obj.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -324,21 +327,21 @@ public class RH
 
                 //if (value == null)
                 //{
-                //    sb.AppendLine($"{indent}- {property.Name} ({typeName})");
+                //    stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName})");
                 //}
                 if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string) || property.PropertyType.IsValueType)
                 {
-                    sb.AppendLine($"{indent}- {property.Name} ({typeName})");
+                    stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName})");
                 }
                 else
                 {
-                    sb.AppendLine($"{indent}- {property.Name} ({typeName}):");
-                    PrintPublicPropertiesRecursively(sb, property.PropertyType, indent + "  ");
+                    stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName}):");
+                    PrintPublicPropertiesRecursively(stringBuilder, property.PropertyType, indent + "  ");
                 }
             }
             catch (Exception ex)
             {
-                sb.AppendLine($"{indent}- {property.Name} ({typeName}): Error getting value - {ex.Message}");
+                stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName}): Error getting value - {ex.Message}");
             }
         }
     }
@@ -359,8 +362,8 @@ public class RH
 
         if (props.Count == 0)
         {
-            var d = GetFields(obj);
-            foreach (var descriptor in d)
+            var data = GetFields(obj);
+            foreach (var descriptor in data)
                 GetValue(descriptor, isAllNeg, onlyNames, onlyNames2, obj, values, onlyValues);
         }
         else
@@ -401,7 +404,7 @@ public class RH
 
 
 
-    private static object GetValue(object instance, MemberInfo[] property, object v)
+    private static object GetValue(object instance, MemberInfo[] property, object value)
     {
         return GetValue(instance, property);
     }
@@ -426,14 +429,14 @@ public class RH
     }
 
 
-    public static object GetValue(string name, Type type, object instance, IList pis, bool ignoreCase, object v)
+    public static object GetValue(string name, Type type, object instance, IList pis, bool ignoreCase, object value)
     {
-        return GetOrSetValue(name, type, instance, pis, ignoreCase, GetValue, v);
+        return GetOrSetValue(name, type, instance, pis, ignoreCase, GetValue, value);
     }
 
 
     public static object GetOrSetValue(string name, Type type, object instance, IList pis, bool ignoreCase,
-        Func<object, MemberInfo[], object, object> getOrSet, object v)
+        Func<object, MemberInfo[], object, object> getOrSet, object value)
     {
         if (ignoreCase)
         {
@@ -442,7 +445,7 @@ public class RH
                 if (item.Name.ToLower() == name)
                 {
                     var property = type.GetMember(name);
-                    if (property != null) return getOrSet(instance, property, v);
+                    if (property != null) return getOrSet(instance, property, value);
                     //return GetValue(instance, property);
                 }
         }
@@ -452,7 +455,7 @@ public class RH
                 if (item.Name == name)
                 {
                     var property = type.GetMember(name);
-                    if (property != null) return getOrSet(instance, property, v);
+                    if (property != null) return getOrSet(instance, property, value);
                     //return GetValue(instance, property);
                 }
         }
@@ -461,11 +464,11 @@ public class RH
     }
 
 
-    private static void AddValue(List<string> values, string name, string v, bool onlyValue)
+    private static void AddValue(List<string> values, string name, string value, bool onlyValue)
     {
-        //var v = SHGetString.ListToString(value, null);
+        //var value = SHGetString.ListToString(value, null);
         if (onlyValue)
-            values.Add(v);
+            values.Add(value);
         else
             values.Add($"{name}: {v}");
     }
@@ -499,7 +502,7 @@ public class RH
         if (a.o.GetType() == typeof(string))
             dump = a.o.ToString();
         else
-            switch (a.d)
+            switch (a.data)
             {
                 case DumpProvider.Xml:
                     dump = DumpAsXml(a.o);
@@ -514,7 +517,7 @@ public class RH
                         GetValuesOfProperty2(a.o, a.onlyNames, a.onlyValues));
                     break;
                 default:
-                    ThrowEx.NotImplementedCase(a.d);
+                    ThrowEx.NotImplementedCase(a.data);
                     break;
             }
 
@@ -524,13 +527,13 @@ public class RH
 
     public static string DumpAsReflection(object o)
     {
-        return DumpAsString(new DumpAsStringArgs { d = DumpProvider.Reflection, o = o });
+        return DumpAsString(new DumpAsStringArgs { data = DumpProvider.Reflection, o = o });
     }
 
     private static string NameOfFieldsFromDump(object obj, DumpAsStringHeaderArgsReflection dumpAsStringHeaderArgs)
     {
         var properties = TypeDescriptor.GetProperties(obj);
-        var ls = new List<string>();
+        var sourceList = new List<string>();
 
         string name = null;
 
@@ -538,49 +541,49 @@ public class RH
         {
             name = descriptor.Name;
             if (dumpAsStringHeaderArgs.onlyNames.Contains("!" + name)) continue;
-            ls.Add(name);
+            sourceList.Add(name);
         }
 
-        return string.Join("-", ls);
+        return string.Join("-", sourceList);
     }
 
-    public static string DumpAsString3Dictionary3<T, T2, U>(string operation,
-        Dictionary<T, Dictionary<T2, List<U>>> grouped)
+    public static string DumpAsString3Dictionary3<temp, T2, U>(string operation,
+        Dictionary<temp, Dictionary<T2, List<U>>> grouped)
     {
-        var sb = new StringBuilder();
-        sb.AppendLine(operation);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine(operation);
 
         foreach (var item in grouped)
         {
-            sb.AppendLine("1) " + item.Key);
+            stringBuilder.AppendLine("1) " + item.Key);
 
             foreach (var item3 in item.Value)
             {
-                sb.AppendLine("2) " + item3.Key);
+                stringBuilder.AppendLine("2) " + item3.Key);
 
-                foreach (var v in item3.Value) sb.AppendLine(v.ToString());
-                sb.AppendLine();
+                foreach (var value in item3.Value) stringBuilder.AppendLine(value.ToString());
+                stringBuilder.AppendLine();
             }
         }
 
-        var vr = sb.ToString();
+        var vr = stringBuilder.ToString();
         return vr;
     }
 
-    public static string DumpAsString3Dictionary2<T, T1>(string operation, Dictionary<T, List<T1>> grouped)
+    public static string DumpAsString3Dictionary2<temp, T1>(string operation, Dictionary<temp, List<T1>> grouped)
     {
-        var sb = new StringBuilder();
-        sb.AppendLine(operation);
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine(operation);
 
         foreach (var item in grouped)
         {
-            sb.AppendLine("1) " + item.Key);
+            stringBuilder.AppendLine("1) " + item.Key);
 
-            foreach (var v in item.Value) sb.AppendLine(v.ToString());
-            sb.AppendLine();
+            foreach (var value in item.Value) stringBuilder.AppendLine(value.ToString());
+            stringBuilder.AppendLine();
         }
 
-        var vr = sb.ToString();
+        var vr = stringBuilder.ToString();
         return vr;
     }
 
@@ -614,23 +617,23 @@ public class RH
 
     #endregion
 
-    //public static void SetPropertyToInnerClass<T>(T propertyGroup, XName name, string value)
+    //public static void SetPropertyToInnerClass<T>(temp propertyGroup, XName name, string value)
     //{
     //    /*
     //    RH.GetValuesOfProperty
     //    RH.GetValuesOfProperty2
     //    RH.GetValuesOfPropertyOrField
     //    */
-    //    var c = propertyGroup;
+    //    var count = propertyGroup;
 
     //    //foreach
     //}
 
     #region Get types of class
 
-    public static List<MethodInfo> GetMethods(Type t)
+    public static List<MethodInfo> GetMethods(Type temp)
     {
-        var methods = t.GetMethods(BindingFlags.Public | BindingFlags.Static |
+        var methods = temp.GetMethods(BindingFlags.Public | BindingFlags.Static |
                                    // return protected/public but not private
                                    BindingFlags.FlattenHierarchy).ToList();
         return methods;
@@ -675,47 +678,47 @@ public class RH
 
     #region For easy copy
 
-    public static object SetValueOfProperty(string name, Type type, object instance, bool ignoreCase, object v)
+    public static object SetValueOfProperty(string name, Type type, object instance, bool ignoreCase, object value)
     {
         var pis = type.GetProperties();
-        return SetValue(name, type, instance, pis, ignoreCase, v);
+        return SetValue(name, type, instance, pis, ignoreCase, value);
     }
 
-    public static object SetValue(string name, Type type, object instance, IList pis, bool ignoreCase, object v)
+    public static object SetValue(string name, Type type, object instance, IList pis, bool ignoreCase, object value)
     {
-        return GetOrSetValue(name, type, instance, pis, ignoreCase, SetValue, v);
+        return GetOrSetValue(name, type, instance, pis, ignoreCase, SetValue, value);
     }
 
-    private static object SetValue(object instance, MemberInfo[] property, object v)
+    private static object SetValue(object instance, MemberInfo[] property, object value)
     {
         var val = property[0];
         if (val is PropertyInfo)
         {
             var pi = (PropertyInfo)val;
-            pi.SetValue(instance, v);
+            pi.SetValue(instance, value);
         }
         else if (val is FieldInfo)
         {
             var pi = (FieldInfo)val;
-            pi.SetValue(instance, v);
+            pi.SetValue(instance, value);
         }
 
         return null;
     }
 
-    public static bool ExistsAssemblyNotFullName(string v)
+    public static bool ExistsAssemblyNotFullName(string value)
     {
         var execAssembly = Assembly.GetEntryAssembly();
         var refAss = AllReferencedAssemblies(execAssembly);
 #if DEBUG
-        //var names = refAss.Select(d => d.Name).ToList();
+        //var names = refAss.Select(data => data.Name).ToList();
         refAss.Sort();
-        if (v == "Aps.Xlf")
+        if (value == "Aps.Xlf")
         {
         }
 #endif
 
-        if (refAss.Contains(v)) return true;
+        if (refAss.Contains(value)) return true;
         return false;
     }
 
@@ -734,7 +737,7 @@ public class RH
 
         var refAss = execAssembly.GetReferencedAssemblies();
         foreach (var item in refAss) AllReferencedAssemblies(allReferencedAssemblies, item);
-        //result.AddRange(refAss.Select(d => d.Name));
+        //result.AddRange(refAss.Select(data => data.Name));
         return allReferencedAssemblies;
     }
 
@@ -812,9 +815,9 @@ public class RH
     /// <typeparam name="T">The type of object being copied.</typeparam>
     /// <param name="source">The object instance to copy.</param>
     /// <returns>The copied object.</returns>
-    public static T Clone<T>(T source)
+    public static temp Clone<T>(temp source)
     {
-        if (!typeof(T).IsSerializable) throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
+        if (!typeof(temp).IsSerializable) throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
 
         // Don't serialize a null object, simply return the default for that object
         if (ReferenceEquals(source, null)) return default;
@@ -830,7 +833,7 @@ public class RH
         //{
         //    formatter.Serialize(stream, source);
         //    stream.Seek(0, SeekOrigin.Begin);
-        //    return (T)formatter.Deserialize(stream);
+        //    return (temp)formatter.Deserialize(stream);
         //}
     }
 
@@ -924,9 +927,9 @@ public class RH
         return mi.DeclaringType.FullName + mi.Name;
     }
 
-    public static string FullNameOfClassEndsDot(Type v)
+    public static string FullNameOfClassEndsDot(Type value)
     {
-        return v.FullName + ".";
+        return value.FullName + ".";
     }
 
     public static string FullNameOfExecutedCode(MethodBase method)
@@ -943,7 +946,7 @@ public class RH
     public static IList<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
         var types = assembly.GetTypes();
-        return types.Where(t => string.Equals(t.Namespace, nameSpace, StringComparison.Ordinal)).ToList();
+        return types.Where(temp => string.Equals(temp.Namespace, nameSpace, StringComparison.Ordinal)).ToList();
     }
 
     /// <summary>
@@ -958,7 +961,7 @@ public class RH
     public static IList<Type> GetTypesInAssembly(Assembly assembly, string contains)
     {
         var types = assembly.GetTypes();
-        return types.Where(t => t.Name.Contains(contains)).ToList();
+        return types.Where(temp => temp.Name.Contains(contains)).ToList();
     }
 
     #endregion
