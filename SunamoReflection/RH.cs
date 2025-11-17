@@ -228,7 +228,7 @@ public class RH
             {
                 stringBuilder.AppendLine(DumpAsString(new DumpAsStringArgs
                 {
-                    data = DumpProvider.Reflection,
+                    d = DumpProvider.Reflection,
                     deli = "-",
                     o = item,
                     onlyValues = true,
@@ -470,7 +470,7 @@ public class RH
         if (onlyValue)
             values.Add(value);
         else
-            values.Add($"{name}: {v}");
+            values.Add($"{name}: {value}");
     }
 
     ///// <summary>
@@ -502,7 +502,7 @@ public class RH
         if (a.o.GetType() == typeof(string))
             dump = a.o.ToString();
         else
-            switch (a.data)
+            switch (a.d)
             {
                 case DumpProvider.Xml:
                     dump = DumpAsXml(a.o);
@@ -517,7 +517,7 @@ public class RH
                         GetValuesOfProperty2(a.o, a.onlyNames, a.onlyValues));
                     break;
                 default:
-                    ThrowEx.NotImplementedCase(a.data);
+                    ThrowEx.NotImplementedCase(a.d);
                     break;
             }
 
@@ -527,7 +527,7 @@ public class RH
 
     public static string DumpAsReflection(object o)
     {
-        return DumpAsString(new DumpAsStringArgs { data = DumpProvider.Reflection, o = o });
+        return DumpAsString(new DumpAsStringArgs { d = DumpProvider.Reflection, o = o });
     }
 
     private static string NameOfFieldsFromDump(object obj, DumpAsStringHeaderArgsReflection dumpAsStringHeaderArgs)
@@ -815,9 +815,9 @@ public class RH
     /// <typeparam name="T">The type of object being copied.</typeparam>
     /// <param name="source">The object instance to copy.</param>
     /// <returns>The copied object.</returns>
-    public static temp Clone<T>(temp source)
+    public static T Clone<T>(T source)
     {
-        if (!typeof(temp).IsSerializable) throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
+        if (!typeof(T).IsSerializable) throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
 
         // Don't serialize a null object, simply return the default for that object
         if (ReferenceEquals(source, null)) return default;
