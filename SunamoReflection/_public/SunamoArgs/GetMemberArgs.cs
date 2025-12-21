@@ -1,8 +1,4 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 namespace SunamoReflection._public.SunamoArgs;
-
-#region For easy copy
 
 public class GetMemberArgs
 {
@@ -10,4 +6,3 @@ public class GetMemberArgs
     private bool toDelete = false;
 }
 
-#endregion

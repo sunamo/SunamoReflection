@@ -1,6 +1,5 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 namespace SunamoReflection;
+
 using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
