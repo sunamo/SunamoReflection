@@ -3,7 +3,7 @@
     <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>25.12.22.1</Version>
+    <Version>25.12.31.1</Version>
     <Description>Advanced reflection for faster development</Description>
     <Authors>www.sunamo.cz</Authors>
     <Copyright>www.sunamo.cz</Copyright>
@@ -12,8 +12,9 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>feat: Upgrade to net10.0</PackageReleaseNotes>
+    <PackageReleaseNotes>feat: better naming for variables</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ObjectDumper.NET" Version="4.3.2" />
