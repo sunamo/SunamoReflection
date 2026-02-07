@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SunamoReflection.Tests\\SunamoReflection.Tests.csproj" />
+  <Project Path="RunnerReflection\\RunnerReflection.csproj" />
+  <Project Path="SunamoReflection\SunamoReflection.csproj" />
+</Solution>
