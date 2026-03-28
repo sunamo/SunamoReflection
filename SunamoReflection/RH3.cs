@@ -4,20 +4,30 @@ using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
 {
+    /// <summary>
+    /// Checks whether a class with the specified name exists in any loaded assembly.
+    /// </summary>
+    /// <param name="className">The class name to search for.</param>
+    /// <returns>True if a class with the specified name exists.</returns>
     public static bool ExistsClass(string className)
     {
-        var type2 = (
+        var foundType = (
             from assembly in AppDomain.CurrentDomain.GetAssemblies()from type in assembly.GetTypes()
             where type.Name == className
             select type).FirstOrDefault();
-        return type2 != null;
+        return foundType != null;
     }
 
-    public static object CopyObject(object input)
+    /// <summary>
+    /// Creates a shallow copy of an object including list fields via reflection.
+    /// </summary>
+    /// <param name="input">The object to copy.</param>
+    /// <returns>A copy of the object, or null if input is null.</returns>
+    public static object? CopyObject(object? input)
     {
         if (input != null)
         {
-            var result = Activator.CreateInstance(input.GetType()); //, BindingFlags.Instance);
+            var result = Activator.CreateInstance(input.GetType());
             foreach (var field in input.GetType().GetFields(BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.Default | BindingFlags.CreateInstance | BindingFlags.DeclaredOnly))
                 if (field.FieldType.GetInterface("IList", false) == null)
                 {
@@ -25,9 +35,9 @@ public partial class RH
                 }
                 else
                 {
-                    var listObject = (IList)field.GetValue(result);
+                    var listObject = (IList?)field.GetValue(result);
                     if (listObject != null)
-                        foreach (var item in (IList)field.GetValue(input))
+                        foreach (var item in (IList)field.GetValue(input)!)
                             listObject.Add(CopyObject(item));
                 }
 
@@ -38,49 +48,49 @@ public partial class RH
     }
 
     /// <summary>
-    ///     Perform a deep Copy of the object.
+    /// Performs a deep copy of an object. Currently not implemented for non-serializable types.
     /// </summary>
-    /// <typeparam name = "T">The type of object being copied.</typeparam>
-    /// <param name = "source">The object instance to copy.</param>
+    /// <typeparam name="T">The type of object being copied.</typeparam>
+    /// <param name="source">The object instance to copy.</param>
     /// <returns>The copied object.</returns>
-    public static T Clone<T>(T source)
+#pragma warning disable SYSLIB0050
+    public static T? Clone<T>(T source)
     {
         if (!typeof(T).IsSerializable)
             throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
-        // Don't serialize a null object, simply return the default for that object
         if (ReferenceEquals(source, null))
             return default;
         ThrowEx.NotImplementedMethod();
         return default;
-    //IFormatter formatter = new BinaryFormatter();
-    //Stream stream = new MemoryStream();
-    //using (stream)
-    //{
-    //    formatter.Serialize(stream, source);
-    //    stream.Seek(0, SeekOrigin.Begin);
-    //    return (temp)formatter.Deserialize(stream);
-    //}
     }
+#pragma warning restore SYSLIB0050
 
-    public static List<string> GetValuesOfPropertyOrField(object o, params string[] onlyNames)
+    /// <summary>
+    /// Gets string values of all properties and fields from an object, optionally filtered by name.
+    /// </summary>
+    /// <param name="instance">The object to inspect.</param>
+    /// <param name="onlyNames">Optional filter for specific property/field names.</param>
+    /// <returns>Combined list of property and field values as strings.</returns>
+    public static List<string> GetValuesOfPropertyOrField(object instance, params string[] onlyNames)
     {
         var values = new List<string>();
-        values.AddRange(GetValuesOfProperty(o, onlyNames));
-        values.AddRange(GetValuesOfField(o, onlyNames));
+        values.AddRange(GetValuesOfProperty(instance, onlyNames));
+        values.AddRange(GetValuesOfField(instance, onlyNames));
         return values;
     }
 
     /// <summary>
-    ///     U složitějších ne mých .net objektů tu byla chyba, proto je zde GetValuesOfProperty2
+    /// Gets string values of all properties from an object using reflection.
+    /// For more complex .NET objects, use GetValuesOfProperty2 instead.
     /// </summary>
-    /// <param name = "o"></param>
-    /// <param name = "onlyNames"></param>
-    /// <returns></returns>
-    public static List<string> GetValuesOfProperty(object o, params string[] onlyNames)
+    /// <param name="instance">The object to inspect.</param>
+    /// <param name="onlyNames">Optional filter for specific property names.</param>
+    /// <returns>List of property values as strings.</returns>
+    public static List<string> GetValuesOfProperty(object instance, params string[] onlyNames)
     {
-        var props = o.GetType().GetProperties();
-        var values = new List<string>(props.Length);
-        foreach (var item in props)
+        var properties = instance.GetType().GetProperties();
+        var values = new List<string>(properties.Length);
+        foreach (var item in properties)
         {
             if (onlyNames.Length > 0)
                 if (!onlyNames.Contains(item.Name))
@@ -89,28 +99,26 @@ public partial class RH
             if (getMethod != null)
             {
                 var name = getMethod.Name;
-                object value = null;
+                object? value = null;
                 if (getMethod.GetParameters().Length > 0)
                 {
                     name += "[]";
-                    value = item.GetValue(o// nechápal jsem tak jsem to zakomentoval
-                    //,new int[] { 1/* indexer value(s)*/}
-                    );
+                    value = item.GetValue(instance);
                 }
                 else
                 {
                     try
                     {
-                        value = item.GetValue(o);
+                        value = item.GetValue(instance);
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        value = Exceptions.TextOfExceptions(ex);
+                        value = Exceptions.TextOfExceptions(exception);
                     }
                 }
 
                 name = name.Replace("get_", string.Empty);
-                AddValue(values, name, value.ToString(), false);
+                AddValue(values, name, value?.ToString() ?? string.Empty, false);
             }
         }
 
@@ -118,58 +126,79 @@ public partial class RH
     }
 
     /// <summary>
-    ///     Copy values of all readable properties
+    /// Copies values of all readable properties from source to target object.
     /// </summary>
-    /// <param name = "source"></param>
-    /// <param name = "target"></param>
+    /// <param name="source">The source object to copy from.</param>
+    /// <param name="target">The target object to copy to.</param>
     public void CopyProperties(object source, object target)
     {
-        var typeB = target.GetType();
+        var targetType = target.GetType();
         foreach (var property in source.GetType().GetProperties())
         {
             if (!property.CanRead || property.GetIndexParameters().Length > 0)
                 continue;
-            var other = typeB.GetProperty(property.Name);
-            if (other != null && other.CanWrite)
-                other.SetValue(target, property.GetValue(source, null), null);
+            var targetProperty = targetType.GetProperty(property.Name);
+            if (targetProperty != null && targetProperty.CanWrite)
+                targetProperty.SetValue(target, property.GetValue(source, null), null);
         }
     }
 
-    public static string FullNameOfMethod(MethodInfo mi)
+    /// <summary>
+    /// Gets the full name of a method (DeclaringType.FullName + MethodName).
+    /// </summary>
+    /// <param name="methodInfo">The method info to get the name from.</param>
+    /// <returns>Full name string.</returns>
+    public static string FullNameOfMethod(MethodInfo methodInfo)
     {
-        return mi.DeclaringType.FullName + mi.Name;
-    }
-
-    public static string FullNameOfClassEndsDot(Type value)
-    {
-        return value.FullName + ".";
-    }
-
-    public static string FullNameOfExecutedCode(MethodBase method)
-    {
-        var methodName = method.Name;
-        var type = method.ReflectedType.Name;
-        return SH.ConcatIfBeforeHasValue(type, ".", methodName, ":");
-    }
-
-    public static IList<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
-    {
-        var types = assembly.GetTypes();
-        return types.Where(temp => string.Equals(temp.Namespace, nameSpace, StringComparison.Ordinal)).ToList();
+        return (methodInfo.DeclaringType?.FullName ?? string.Empty) + methodInfo.Name;
     }
 
     /// <summary>
-    ///     Pokud mám chybu Could not load file or assembly System.Reflection.Metadata, Version=1.4.5.0
-    ///     program volám z AllProjectsSearchConsole tuto sunamo assembly,
-    ///     musím přidat System.Reflection.Metadata do obou. Ověřeno.
-    ///     Better than load assembly directly from running is use Assembly.LoadFrom
+    /// Gets the full name of a class ending with a dot.
     /// </summary>
-    /// <param name = "assembly"></param>
-    /// <param name = "contains"></param>
-    /// <returns></returns>
+    /// <param name="type">The type to get the full name for.</param>
+    /// <returns>Full name followed by a dot.</returns>
+    public static string FullNameOfClassEndsDot(Type type)
+    {
+        return type.FullName + ".";
+    }
+
+    /// <summary>
+    /// Gets the full name of the currently executing code location from a MethodBase.
+    /// </summary>
+    /// <param name="method">The method base to extract info from.</param>
+    /// <returns>Formatted string "TypeName.MethodName:".</returns>
+    public static string FullNameOfExecutedCode(MethodBase method)
+    {
+        var methodName = method.Name;
+        var typeName = method.ReflectedType?.Name ?? string.Empty;
+        return SH.ConcatIfBeforeHasValue(typeName, ".", methodName, ":");
+    }
+
+    /// <summary>
+    /// Gets all types defined in the specified namespace within the given assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly to search.</param>
+    /// <param name="nameSpace">The namespace to filter by.</param>
+    /// <returns>List of types in the specified namespace.</returns>
+    public static IList<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
+    {
+        var types = assembly.GetTypes();
+        return types.Where(type => string.Equals(type.Namespace, nameSpace, StringComparison.Ordinal)).ToList();
+    }
+
+    /// <summary>
+    /// Gets all types in the assembly whose names contain the specified string.
+    /// Better than loading assemblies directly from the running process is using Assembly.LoadFrom.
+    /// If you encounter "Could not load file or assembly System.Reflection.Metadata",
+    /// add System.Reflection.Metadata to both the calling and target projects.
+    /// </summary>
+    /// <param name="assembly">The assembly to search.</param>
+    /// <param name="contains">The substring to search for in type names.</param>
+    /// <returns>List of matching types.</returns>
     public static IList<Type> GetTypesInAssembly(Assembly assembly, string contains)
     {
         var types = assembly.GetTypes();
-        return types.Where(temp => temp.Name.Contains(contains)).ToList();
+        return types.Where(type => type.Name.Contains(contains)).ToList();
     }
 }

@@ -4,88 +4,83 @@ using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
 {
-    /////// <summary>
-    /////// Delimited by NL
-    /////// </summary>
-    /////// <param name="v"></param>
-    /////// <param name="device"></param>
-    /////// <returns></returns>
-    //public static string DumpAsString2(string value, object device)
-    //{
-    //    return SunamoExceptions.RH.DumpAsString(value, device);
-    //    //DumpAsString(new DumpAsStringArgs { name = value, o = device, data = DumpProvider.Yaml });
-    //}
     /// <summary>
-    ///     swda Delimiter
-    ///     Mainly for fast comparing objects
-    ///     Zde můžu zadat jen onlyNames kvůli DumpAsStringHeaderArgs
-    ///     Pokud chci více customizovat výstup, musím užít DumpAsString - DumpAsStringArgs
+    /// Dumps an object as a string using default header arguments with delimiter-separated values.
+    /// Mainly for fast comparing objects. Only OnlyNames can be specified via DumpAsStringHeaderArgsReflection.
+    /// For more customization, use DumpAsString with DumpAsStringArgs directly.
     /// </summary>
-    /// <param name = "v"></param>
-    /// <param name = "tableRowPageNew"></param>
-    /// <returns></returns>
-    public static string DumpAsString3(object tableRowPageNew, DumpAsStringHeaderArgsReflection a = null)
+    /// <param name="instance">The object to dump.</param>
+    /// <param name="args">Optional header arguments for name filtering.</param>
+    /// <returns>Delimiter-separated string of object values.</returns>
+    public static string DumpAsString3(object instance, DumpAsStringHeaderArgsReflection? args = null)
     {
-        if (a == null)
-            a = DumpAsStringHeaderArgsReflection.Default;
-        var dasa = new DumpAsStringArgs
+        if (args == null)
+            args = DumpAsStringHeaderArgsReflection.Default;
+        var dumpArgs = new DumpAsStringArgs
         {
-            o = tableRowPageNew,
-            deli = "-",
-            onlyValues = true,
-            onlyNames = a.onlyNames
+            Object = instance,
+            Delimiter = "-",
+            IsOnlyValues = true,
+            OnlyNames = args.OnlyNames
         };
-        return DumpAsString(dasa);
+        return DumpAsString(dumpArgs);
     }
 
-    public static List<string> GetValuesOfField(object o, params string[] onlyNames)
+    /// <summary>
+    /// Gets string values of all fields from an object, optionally filtered by name.
+    /// </summary>
+    /// <param name="instance">The object to inspect.</param>
+    /// <param name="onlyNames">Optional filter for specific field names.</param>
+    /// <returns>List of field values as strings.</returns>
+    public static List<string> GetValuesOfField(object instance, params string[] onlyNames)
     {
-        return GetValuesOfField(o, onlyNames);
+        return GetValuesOfField(instance, onlyNames);
     }
 
-    public static List<string> GetValuesOfField(object o, IList<string> onlyNames, bool onlyValues)
+    /// <summary>
+    /// Gets string values of all fields from an object with control over value-only output.
+    /// </summary>
+    /// <param name="instance">The object to inspect.</param>
+    /// <param name="onlyNames">Filter for specific field names.</param>
+    /// <param name="isOnlyValues">When true, returns only values without field names.</param>
+    /// <returns>List of field values as strings.</returns>
+    public static List<string> GetValuesOfField(object instance, IList<string> onlyNames, bool isOnlyValues)
     {
-        var temp = o.GetType();
-        var props = temp.GetFields();
-        var values = new List<string>(props.Length);
-        foreach (var item in props)
+        var type = instance.GetType();
+        var fields = type.GetFields();
+        var values = new List<string>(fields.Length);
+        foreach (var item in fields)
         {
             if (onlyNames.Count > 0)
                 if (!onlyNames.Contains(item.Name))
                     continue;
-            //values.Add(item.Name + ":" + SHGetString.ListToString(GetValueOfField(item.Name, temp, o, false)));
-            AddValue(values, item.Name, GetValueOfField(item.Name, temp, o, false).ToString(), onlyValues);
+            AddValue(values, item.Name, GetValueOfField(item.Name, type, instance, false)?.ToString() ?? string.Empty, isOnlyValues);
         }
 
         return values;
     }
 
     /// <summary>
-    /// Tato metoda se mi hodila value usysu
-    /// Tam mi dělala StackOverflowException
+    /// Recursively prints the public properties of a type and its nested complex types.
+    /// This method was useful in usysu where StackOverflowException occurred.
     /// </summary>
-    /// <param name = "sb"></param>
-    /// <param name = "obj"></param>
-    /// <param name = "indent"></param>
-    public static void PrintPublicPropertiesRecursively(StringBuilder stringBuilder, Type obj, string indent = "  ")
+    /// <param name="stringBuilder">The StringBuilder to append output to.</param>
+    /// <param name="type">The type to inspect.</param>
+    /// <param name="indent">The indentation prefix for nested levels.</param>
+    public static void PrintPublicPropertiesRecursively(StringBuilder stringBuilder, Type? type, string indent = "  ")
     {
-        if (obj == null)
+        if (type == null)
         {
             return;
         }
 
-        stringBuilder.AppendLine($"{indent}Object Type: {obj.Name}");
-        PropertyInfo[] properties = obj.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        stringBuilder.AppendLine($"{indent}Object Type: {type.Name}");
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         foreach (PropertyInfo property in properties)
         {
             string typeName = property.PropertyType.Name;
             try
             {
-                //object value = property.GetValue(obj);
-                //if (value == null)
-                //{
-                //    stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName})");
-                //}
                 if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string) || property.PropertyType.IsValueType)
                 {
                     stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName})");
@@ -96,144 +91,171 @@ public partial class RH
                     PrintPublicPropertiesRecursively(stringBuilder, property.PropertyType, indent + "  ");
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName}): Error getting value - {ex.Message}");
+                stringBuilder.AppendLine($"{indent}- {property.Name} ({typeName}): Error getting value - {exception.Message}");
             }
         }
     }
 
-    public static List<string> GetValuesOfProperty2(object obj, List<string> onlyNames, bool onlyValues /*,
-        bool takeVariablesIfThereIsNoProps = true*/)
+    /// <summary>
+    /// Gets property values of an object, falling back to fields if no properties exist.
+    /// Supports negation filters with "!" prefix in onlyNames.
+    /// </summary>
+    /// <param name="instance">The object to inspect.</param>
+    /// <param name="onlyNames">Filter for specific property names. Prefix with "!" to exclude.</param>
+    /// <param name="isOnlyValues">When true, returns only values without property names.</param>
+    /// <returns>List of property/field values as strings.</returns>
+    public static List<string> GetValuesOfProperty2(object instance, List<string> onlyNames, bool isOnlyValues)
     {
-        var onlyNames2 = onlyNames.ToList();
+        var filterNames = onlyNames.ToList();
         var values = new List<string>();
-        string name = null;
-        var props = GetProps(obj); //TypeDescriptor.GetProperties(obj);
-        var isAllNeg = true;
+        var properties = GetProps(instance);
+        var isAllNegated = true;
         foreach (var item in onlyNames)
             if (!item.StartsWith("!"))
-                isAllNeg = false;
-        if (props.Count == 0)
+                isAllNegated = false;
+        if (properties.Count == 0)
         {
-            var data = GetFields(obj);
-            foreach (var descriptor in data)
-                GetValue(descriptor, isAllNeg, onlyNames, onlyNames2, obj, values, onlyValues);
+            var fieldList = GetFields(instance);
+            foreach (var descriptor in fieldList)
+                GetValue(descriptor, isAllNegated, onlyNames, filterNames, instance, values, isOnlyValues);
         }
         else
         {
-            foreach (var descriptor in props)
-                GetValue(descriptor, isAllNeg, onlyNames, onlyNames2, obj, values, onlyValues);
+            foreach (var descriptor in properties)
+                GetValue(descriptor, isAllNegated, onlyNames, filterNames, instance, values, isOnlyValues);
         }
 
         return values;
     }
 
-    public static void GetValue(MemberInfo descriptor, bool isAllNeg, List<string> onlyNames, List<string> onlyNames2, object obj, List<string> values, bool onlyValues)
+    /// <summary>
+    /// Extracts the value of a member (property or field) and adds it to the values list, applying name filters.
+    /// </summary>
+    /// <param name="descriptor">The member to extract the value from.</param>
+    /// <param name="isAllNegated">Whether all filter names are negation filters.</param>
+    /// <param name="onlyNames">The original name filter list.</param>
+    /// <param name="filterNames">Working copy of the filter list.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="values">The list to add extracted values to.</param>
+    /// <param name="isOnlyValues">When true, adds only the value without the name prefix.</param>
+    public static void GetValue(MemberInfo descriptor, bool isAllNegated, List<string> onlyNames, List<string> filterNames, object instance, List<string> values, bool isOnlyValues)
     {
-        var add = true;
+        var isAdding = true;
         var name = descriptor.Name;
         if (onlyNames.Contains("!" + name))
             return;
-        if (onlyNames2.Count > 0)
+        if (filterNames.Count > 0)
         {
-            if (isAllNeg)
+            if (isAllNegated)
             {
-                if (onlyNames2.Contains("!" + name))
-                    add = false;
+                if (filterNames.Contains("!" + name))
+                    isAdding = false;
             }
             else
             {
-                if (!onlyNames2.Contains(name))
-                    add = false;
+                if (!filterNames.Contains(name))
+                    isAdding = false;
             }
         }
 
-        if (add)
+        if (isAdding)
         {
-            var value = GetValue(obj, descriptor);
-            AddValue(values, name, value.ToString(), onlyValues);
+            var value = GetValue(instance, descriptor);
+            AddValue(values, name, value?.ToString() ?? string.Empty, isOnlyValues);
         }
     }
 
-    private static object GetValue(object instance, MemberInfo[] property, object value)
+    private static object? GetValue(object instance, MemberInfo[] members, object? value)
     {
-        return GetValue(instance, property);
+        return GetValue(instance, members);
     }
 
-    private static object GetValue(object instance, params MemberInfo[] property)
+    private static object? GetValue(object instance, params MemberInfo[] members)
     {
-        var val = property[0];
-        if (val is PropertyInfo)
+        var member = members[0];
+        if (member is PropertyInfo propertyInfo)
         {
-            var pi = (PropertyInfo)val;
-            return pi.GetValue(instance);
+            return propertyInfo.GetValue(instance);
         }
 
-        if (val is FieldInfo)
+        if (member is FieldInfo fieldInfo)
         {
-            var pi = (FieldInfo)val;
-            return pi.GetValue(instance);
+            return fieldInfo.GetValue(instance);
         }
 
         return null;
     }
 
-    public static object GetValue(string name, Type type, object instance, IList pis, bool ignoreCase, object value)
+    /// <summary>
+    /// Gets a member value by name from an object instance, searching in the provided member list.
+    /// </summary>
+    /// <param name="name">The member name to find.</param>
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="members">The list of members to search in.</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <param name="value">Unused parameter (reserved for set operations).</param>
+    /// <returns>The member value or null if not found.</returns>
+    public static object? GetValue(string name, Type type, object instance, IList members, bool isIgnoringCase, object? value)
     {
-        return GetOrSetValue(name, type, instance, pis, ignoreCase, GetValue, value);
+        return GetOrSetValue(name, type, instance, members, isIgnoringCase, GetValue, value);
     }
 
-    public static object GetOrSetValue(string name, Type type, object instance, IList pis, bool ignoreCase, Func<object, MemberInfo[], object, object> getOrSet, object value)
+    /// <summary>
+    /// Gets or sets a member value by name, using the provided delegate for the actual get/set operation.
+    /// </summary>
+    /// <param name="name">The member name to find.</param>
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="members">The list of members to search in.</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <param name="getOrSet">The delegate to perform the actual get or set operation.</param>
+    /// <param name="value">The value to set (used only for set operations).</param>
+    /// <returns>The member value for get operations, or null.</returns>
+    public static object? GetOrSetValue(string name, Type type, object instance, IList members, bool isIgnoringCase, Func<object, MemberInfo[], object?, object?> getOrSet, object? value)
     {
-        if (ignoreCase)
+        if (isIgnoringCase)
         {
             name = name.ToLower();
-            foreach (MemberInfo item in pis)
+            foreach (MemberInfo item in members)
                 if (item.Name.ToLower() == name)
                 {
-                    var property = type.GetMember(name);
-                    if (property != null)
-                        return getOrSet(instance, property, value);
-                //return GetValue(instance, property);
+                    var memberArray = type.GetMember(name);
+                    if (memberArray != null)
+                        return getOrSet(instance, memberArray, value);
                 }
         }
         else
         {
-            foreach (MemberInfo item in pis)
+            foreach (MemberInfo item in members)
                 if (item.Name == name)
                 {
-                    var property = type.GetMember(name);
-                    if (property != null)
-                        return getOrSet(instance, property, value);
-                //return GetValue(instance, property);
+                    var memberArray = type.GetMember(name);
+                    if (memberArray != null)
+                        return getOrSet(instance, memberArray, value);
                 }
         }
 
         return null;
     }
 
-    private static void AddValue(List<string> values, string name, string value, bool onlyValue)
+    private static void AddValue(List<string> values, string name, string value, bool isOnlyValue)
     {
-        //var value = SHGetString.ListToString(value, null);
-        if (onlyValue)
+        if (isOnlyValue)
             values.Add(value);
         else
             values.Add($"{name}: {value}");
     }
 
-    ///// <summary>
-    ///// Check whether A1 is or is derived from A2
-    ///// </summary>
-    ///// <param name="type1"></param>
-    ///// <param name="type2"></param>
-    //public static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
-    //{
-    //    return se.RH.IsOrIsDeriveFromBaseClass(children, parent, a1CanBeString);
-    //}
-    public static string DumpAsObjectDumperNet(object o)
+    /// <summary>
+    /// Dumps an object using the ObjectDumper.NET library.
+    /// </summary>
+    /// <param name="instance">The object to dump.</param>
+    /// <returns>String representation from ObjectDumper.NET.</returns>
+    public static string DumpAsObjectDumperNet(object instance)
     {
-        //return ObjectDumperNetHelper.Dump(o);
-        return ObjectDumper.Dump(o);
+        return ObjectDumper.Dump(instance);
     }
 }

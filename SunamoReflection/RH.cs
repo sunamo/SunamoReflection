@@ -2,38 +2,46 @@ namespace SunamoReflection;
 
 using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
+/// <summary>
+/// Reflection helper providing dump, property/field access, and type inspection utilities.
+/// </summary>
 public partial class RH
 {
-    private static Type type = typeof(ThrowEx);
     /// <summary>
-    ///     Usage: some methods just dump exceptions object
+    /// Serializes an object to XML string. Returns the exception text if serialization fails.
     /// </summary>
-    /// <param name = "empty"></param>
-    /// <param name = "output"></param>
-    /// <returns></returns>
+    /// <param name="output">The object to serialize to XML.</param>
+    /// <returns>XML string representation of the object.</returns>
     public static string DumpAsXml(object output)
     {
         string objectAsXmlString;
-        XmlSerializer xs = new(output.GetType());
-        using (StringWriter sw = new())
+        XmlSerializer serializer = new(output.GetType());
+        using (StringWriter writer = new())
         {
             try
             {
-                xs.Serialize(sw, output);
-                objectAsXmlString = sw.ToString();
+                serializer.Serialize(writer, output);
+                objectAsXmlString = writer.ToString();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                objectAsXmlString = ex.ToString();
+                objectAsXmlString = exception.ToString();
             }
         }
 
         return objectAsXmlString;
     }
 
-    public static bool IsOrIsDeriveFromBaseClass(Type children, Type parent, bool a1CanBeString = true)
+    /// <summary>
+    /// Checks whether the child type is or derives from the parent type, including interface checks.
+    /// </summary>
+    /// <param name="children">The child type to check.</param>
+    /// <param name="parent">The parent type to check against.</param>
+    /// <param name="isAllowingString">Whether to allow string type as a valid child.</param>
+    /// <returns>True if children is or derives from parent.</returns>
+    public static bool IsOrIsDeriveFromBaseClass(Type? children, Type parent, bool isAllowingString = true)
     {
-        if (children == typeof(string) && !a1CanBeString)
+        if (children == typeof(string) && !isAllowingString)
             return false;
         if (children == null)
             ThrowEx.IsNull("children", children);
@@ -43,143 +51,188 @@ public partial class RH
                 return false;
             if (children == parent)
                 return true;
-            foreach (var inter in children.GetInterfaces())
-                if (inter == parent)
+            foreach (var interfaceType in children.GetInterfaces())
+                if (interfaceType == parent)
                     return true;
             children = children.BaseType;
         }
     }
 
     /// <summary>
-    /// Získá názvy všech properties ve třídě bez ohledu na access modifier.
-    /// Pouze deklarované value třídě, bez jakýchkoliv zděděných. 
+    /// Gets all property names declared on the specified type (not inherited), regardless of access modifier.
     /// </summary>
-    /// <param name = "obj"></param>
-    /// <returns></returns>
+    /// <param name="type">The type to inspect.</param>
+    /// <returns>List of property names.</returns>
     public static List<string> GetPropertyNames(Type type)
     {
         PropertyInfo[] properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-        return properties.Select(data => data.Name).ToList();
-    }
-
-    public static string FullPathCodeEntity(Type temp)
-    {
-        return temp.Namespace + "." + temp.Name;
-    }
-
-    public static Assembly AssemblyWithName(string name)
-    {
-        var ass = AppDomain.CurrentDomain.GetAssemblies();
-        var result = ass.Where(data => data.GetName().Name == name);
-        if (result.Count() == 0)
-            result = ass.Where(data => data.FullName == name);
-        if (result.Count() == 0)
-            result = ass.Where(data => data.FullName.Contains(name));
-        return result.FirstOrDefault();
-    }
-
-    private static List<PropertyInfo> GetProps(object carSAuto)
-    {
-        var carSAutoType = GetType(carSAuto);
-        var result = carSAutoType.GetProperties().ToList();
-        return result;
-    }
-
-    private static Type GetType(object carSAuto)
-    {
-        Type carSAutoType = null;
-        var t1 = carSAuto.GetType();
-        if (IsType(t1))
-            carSAutoType = carSAuto as Type;
-        else
-            carSAutoType = carSAuto.GetType();
-        return carSAutoType;
+        return properties.Select(property => property.Name).ToList();
     }
 
     /// <summary>
-    ///     A1 can be Type of instance
-    ///     All fields must be public
+    /// Returns the full path of a code entity (Namespace.Name).
     /// </summary>
-    /// <param name = "carSAutoType"></param>
-    public static List<FieldInfo> GetFields(object carSAuto)
+    /// <param name="type">The type to get the full path for.</param>
+    /// <returns>Full namespace-qualified name.</returns>
+    public static string FullPathCodeEntity(Type type)
     {
-        Type carSAutoType = null;
-        var t1 = carSAuto.GetType();
-        if (IsType(t1))
-            carSAutoType = carSAuto as Type;
-        else
-            carSAutoType = carSAuto.GetType();
-        var result = carSAutoType.GetFields().ToList();
+        return type.Namespace + "." + type.Name;
+    }
+
+    /// <summary>
+    /// Finds a loaded assembly by name, trying exact name, full name, and partial match.
+    /// </summary>
+    /// <param name="name">The assembly name to search for.</param>
+    /// <returns>The matching assembly or null.</returns>
+    public static Assembly? AssemblyWithName(string name)
+    {
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        var result = assemblies.Where(assembly => assembly.GetName().Name == name);
+        if (!result.Any())
+            result = assemblies.Where(assembly => assembly.FullName == name);
+        if (!result.Any())
+            result = assemblies.Where(assembly => assembly.FullName != null && assembly.FullName.Contains(name));
+        return result.FirstOrDefault();
+    }
+
+    private static List<PropertyInfo> GetProps(object instance)
+    {
+        var instanceType = GetType(instance);
+        var result = instanceType.GetProperties().ToList();
         return result;
     }
 
-    private static bool IsType(Type t1)
+    private static Type GetType(object instance)
     {
-        var t2 = typeof(Type);
-        return t1.FullName == "System.RuntimeType" || t1 == t2;
+        var objectType = instance.GetType();
+        if (IsType(objectType))
+            return (instance as Type) ?? objectType;
+        return objectType;
     }
 
+    /// <summary>
+    /// Gets all public fields of an object. The parameter can be a Type or an instance.
+    /// </summary>
+    /// <param name="instance">The object or Type to inspect.</param>
+    /// <returns>List of public fields.</returns>
+    public static List<FieldInfo> GetFields(object instance)
+    {
+        var objectType = instance.GetType();
+        Type instanceType;
+        if (IsType(objectType))
+            instanceType = (instance as Type) ?? objectType;
+        else
+            instanceType = objectType;
+        var result = instanceType.GetFields().ToList();
+        return result;
+    }
+
+    private static bool IsType(Type objectType)
+    {
+        var typeOfType = typeof(Type);
+        return objectType.FullName == "System.RuntimeType" || objectType == typeOfType;
+    }
+
+    /// <summary>
+    /// Gets string values of all constants defined on the specified type.
+    /// </summary>
+    /// <param name="type">The type to inspect for constants.</param>
+    /// <returns>Trimmed string values of the constants.</returns>
     public static List<string> GetValuesOfConsts(Type type)
     {
-        var count = GetConsts(type);
-        var vr = new List<string>();
-        foreach (var item in count)
-            vr.Add(SH.NullToStringOrDefault(item.GetValue(null)));
-        for (var i = 0; i < vr.Count; i++)
-            vr[i] = vr[i].Trim();
-        return vr;
+        var constants = GetConsts(type);
+        var result = new List<string>();
+        foreach (var item in constants)
+            result.Add(SH.NullToStringOrDefault(item.GetValue(null)!));
+        for (var i = 0; i < result.Count; i++)
+            result[i] = result[i].Trim();
+        return result;
     }
 
-    public static Dictionary<string, string> GetValuesOfConsts(Type temp, params string[] onlyNames)
+    /// <summary>
+    /// Gets constant values as a dictionary of name-value pairs, optionally filtered by name.
+    /// </summary>
+    /// <param name="type">The type to inspect for constants.</param>
+    /// <param name="onlyNames">Optional filter for specific constant names.</param>
+    /// <returns>Dictionary mapping constant names to their string values.</returns>
+    public static Dictionary<string, string> GetValuesOfConsts(Type type, params string[] onlyNames)
     {
-        var props = GetConsts(temp);
-        var values = new Dictionary<string, string>(props.Count);
-        foreach (var item in props)
+        var constants = GetConsts(type);
+        var values = new Dictionary<string, string>(constants.Count);
+        foreach (var item in constants)
         {
             if (onlyNames.Length > 0)
                 if (!onlyNames.Contains(item.Name))
                     continue;
-            var o = GetValueOfField(item.Name, temp, null, false);
-            values.Add(item.Name, o.ToString());
+            var fieldValue = GetValueOfField(item.Name, type, null!, false);
+            values.Add(item.Name, fieldValue?.ToString() ?? string.Empty);
         }
 
         return values;
     }
 
-    public static object GetValueOfPropertyOrField(object o, string name)
+    /// <summary>
+    /// Gets the value of a property or field by name from an object instance.
+    /// </summary>
+    /// <param name="instance">The object instance to inspect.</param>
+    /// <param name="name">The name of the property or field.</param>
+    /// <returns>The value of the property or field.</returns>
+    public static object? GetValueOfPropertyOrField(object instance, string name)
     {
-        var type = o.GetType();
-        var value = GetValueOfProperty(name, type, o, false);
+        var type = instance.GetType();
+        var value = GetValueOfProperty(name, type, instance, false);
         if (value == null)
-            value = GetValueOfField(name, type, o, false);
+            value = GetValueOfField(name, type, instance, false);
         return value;
     }
 
-    public static object GetValueOfField(string name, Type type, object instance, bool ignoreCase)
+    /// <summary>
+    /// Gets the value of a field by name from an object instance.
+    /// </summary>
+    /// <param name="name">The field name.</param>
+    /// <param name="type">The type containing the field.</param>
+    /// <param name="instance">The object instance (null for static fields).</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <returns>The field value.</returns>
+    public static object? GetValueOfField(string name, Type type, object instance, bool isIgnoringCase)
     {
-        var pis = type.GetFields();
-        return GetValue(name, type, instance, pis, ignoreCase, null);
+        var fields = type.GetFields();
+        return GetValue(name, type, instance, fields, isIgnoringCase, null);
     }
 
-    public static object GetValueOfProperty(string name, Type type, object instance, bool ignoreCase)
+    /// <summary>
+    /// Gets the value of a property by name from an object instance.
+    /// </summary>
+    /// <param name="name">The property name.</param>
+    /// <param name="type">The type containing the property.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <returns>The property value.</returns>
+    public static object? GetValueOfProperty(string name, Type type, object instance, bool isIgnoringCase)
     {
-        var pis = type.GetProperties();
-        return GetValue(name, type, instance, pis, ignoreCase, null);
+        var properties = type.GetProperties();
+        return GetValue(name, type, instance, properties, isIgnoringCase, null);
     }
 
-    public static string DumpListAsString(DumpAsStringArgs a, bool removeNull = false)
+    /// <summary>
+    /// Dumps a list of objects as a multi-line string with a header row of field names.
+    /// </summary>
+    /// <param name="args">Dump arguments containing the list object.</param>
+    /// <param name="isRemovingNull">Whether to remove null entries from the list before dumping.</param>
+    /// <returns>Formatted string representation of the list.</returns>
+    public static string DumpListAsString(DumpAsStringArgs args, bool isRemovingNull = false)
     {
         var stringBuilder = new StringBuilder();
-        var f = (List<object>)a.o;
-        if (removeNull)
-            f.RemoveAll(data => data == null);
-        if (f.Count > 0)
+        var list = (List<object>)args.Object;
+        if (isRemovingNull)
+            list.RemoveAll(element => element == null);
+        if (list.Count > 0)
         {
-            stringBuilder.AppendLine(NameOfFieldsFromDump(f.First(), a));
-            foreach (var item in f)
+            stringBuilder.AppendLine(NameOfFieldsFromDump(list.First(), args));
+            foreach (var item in list)
             {
-                a.o = item;
-                stringBuilder.AppendLine(DumpAsString(a));
+                args.Object = item;
+                stringBuilder.AppendLine(DumpAsString(args));
             }
         }
 
@@ -187,34 +240,25 @@ public partial class RH
     }
 
     /// <summary>
-    ///     DumpAsString2 se mi ztratilo
-    ///     nemůžu ho najít value žádném repu
+    /// Dumps a list of objects as a compact one-line-per-item string with a header.
     /// </summary>
-    /// <param name = "name"></param>
-    /// <param name = "o"></param>
-    /// <returns></returns>
-     //public static string DumpListAsString(string name, IList o)
-    //{
-    //    var stringBuilder = new StringBuilder();
-    //    var i = 0;
-    //    foreach (var item in o) ThrowEx.NotImplementedMethod();
-    //    //stringBuilder.AppendLine(DumpAsString2(name + "#" + i, item));
-    //    //i++;
-    //    return stringBuilder.ToString();
-    //}
-    public static string DumpListAsStringOneLine(string operation, IList o, DumpAsStringHeaderArgsReflection a)
+    /// <param name="operation">The operation name to display in the header.</param>
+    /// <param name="list">The list of objects to dump.</param>
+    /// <param name="args">Header arguments controlling which fields to include.</param>
+    /// <returns>Formatted string representation.</returns>
+    public static string DumpListAsStringOneLine(string operation, IList list, DumpAsStringHeaderArgsReflection args)
     {
-        if (o.Count > 0)
+        if (list.Count > 0)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("***");
-            stringBuilder.AppendLine(operation + " " + "(" + o.Count + ")" + ":");
-            stringBuilder.AppendLine(NameOfFieldsFromDump(o.Count != 0 ? null : o[0], a));
-            var i = 0;
-            foreach (var item in o)
+            stringBuilder.AppendLine(operation + " " + "(" + list.Count + ")" + ":");
+            var headerObject = list.Count > 0 ? list[0] : null;
+            if (headerObject != null)
+                stringBuilder.AppendLine(NameOfFieldsFromDump(headerObject, args));
+            foreach (var item in list)
             {
-                stringBuilder.AppendLine(DumpAsString(new DumpAsStringArgs { d = DumpProvider.Reflection, deli = "-", o = item, onlyValues = true, onlyNames = a.onlyNames }));
-                i++;
+                stringBuilder.AppendLine(DumpAsString(new DumpAsStringArgs { Provider = DumpProvider.Reflection, Delimiter = "-", Object = item!, IsOnlyValues = true, OnlyNames = args.OnlyNames }));
             }
 
             stringBuilder.AppendLine("***");

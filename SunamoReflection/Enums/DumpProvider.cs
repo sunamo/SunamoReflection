@@ -1,32 +1,35 @@
 namespace SunamoReflection.Enums;
 
+/// <summary>
+/// Specifies the provider used for dumping objects as strings.
+/// </summary>
 public enum DumpProvider
 {
     /// <summary>
-    ///     When use JsonParser return empty.
+    /// When using JsonParser returns empty.
     /// </summary>
     Json,
 
     /// <summary>
-    ///     Nejde použít na dynamic object
+    /// Cannot be used on dynamic objects.
     /// </summary>
     Reflection,
 
     /// <summary>
-    ///     Throw NullReferenceException, DONT USE
+    /// Throws NullReferenceException, DO NOT USE.
     /// </summary>
     Yaml,
 
     /// <summary>
-    ///     Přidal jsem Net, protože ObjectDumper package je 12 let bez update
-    ///     Can be used on dynamic
+    /// Added "Net" suffix because the original ObjectDumper package has not been updated for 12 years.
+    /// Can be used on dynamic objects.
     /// </summary>
     ObjectDumperNet,
 
     /// <summary>
-    ///     Taky nejde použít na dynamic object
-    ///     To be XML serializable, types which inherit from IEnumerable must have an implementation of Add(System.Object) at
-    ///     all levels of their inheritance hierarchy. System.Dynamic.ExpandoObject does not implement Add(System.Object).'
+    /// Cannot be used on dynamic objects.
+    /// To be XML serializable, types which inherit from IEnumerable must have an implementation of Add(System.Object) at
+    /// all levels of their inheritance hierarchy. System.Dynamic.ExpandoObject does not implement Add(System.Object).
     /// </summary>
     Xml
 }

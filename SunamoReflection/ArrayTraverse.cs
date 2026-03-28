@@ -1,10 +1,21 @@
 namespace SunamoReflection;
 
+/// <summary>
+/// Traverses a multi-dimensional array by stepping through all index combinations.
+/// </summary>
 public class ArrayTraverse
 {
     private readonly int[] maxLengths;
+
+    /// <summary>
+    /// The current position in the multi-dimensional array.
+    /// </summary>
     public int[] Position;
 
+    /// <summary>
+    /// Initializes a new instance for traversing the specified array.
+    /// </summary>
+    /// <param name="array">The array to traverse.</param>
     public ArrayTraverse(Array array)
     {
         maxLengths = new int[array.Rank];
@@ -12,6 +23,10 @@ public class ArrayTraverse
         Position = new int[array.Rank];
     }
 
+    /// <summary>
+    /// Advances the position to the next element in the array.
+    /// </summary>
+    /// <returns>True if there are more elements, false if traversal is complete.</returns>
     public bool Step()
     {
         for (var i = 0; i < Position.Length; ++i)

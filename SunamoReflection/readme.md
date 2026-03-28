@@ -1,20 +1,50 @@
-### SunamoReflection
+# SunamoReflection
 
-Part of PlatformIndependentNuGetPackages:
+Advanced reflection utilities for .NET providing object dumping, deep copying, property/field inspection, and type analysis.
 
-- [nuget.org](https://www.nuget.org/profiles/sunamo)
-- [github.org](https://github.com/sunamo/PlatformIndependentNuGetPackages)
+## Features
 
-Another links:
+- **Object Dumping**: Serialize objects to string representations using multiple providers (Reflection, XML, YAML, JSON, ObjectDumper.NET)
+- **Deep Copy**: Create deep copies of objects via reflection with circular reference handling
+- **Property/Field Access**: Get and set property and field values by name with case-insensitive matching
+- **Type Inspection**: Query types for constants, methods, properties, and fields
+- **Assembly Analysis**: Search loaded assemblies and enumerate referenced assemblies recursively
 
-- [Developer site](https://sunamo.cz)
+## Installation
 
-Request for new features / bug report / etc: [Mail](mailto:radek.jancik@sunamo.cz) or on GitHub
+```bash
+dotnet add package SunamoReflection
+```
+
+## Quick Start
+
+```csharp
+using SunamoReflection;
+
+// Dump an object as string
+var dump = RH.DumpAsReflection(myObject);
+
+// Get property names
+var names = RH.GetPropertyNames(typeof(MyClass));
+
+// Deep copy an object
+var copy = RHCopy.Copy(originalObject);
+
+// Check type hierarchy
+bool isDerived = RH.IsOrIsDeriveFromBaseClass(childType, parentType);
+```
+
 ## Target Frameworks
 
 **TargetFrameworks:** `net10.0;net9.0;net8.0`
 
-**Reason:** Code uses C# 12.0 features (collection expressions, primary constructors) or dependencies requiring .NET 8.0+:
-- Collection expressions `[]` syntax requires C# 12.0 (net8.0+)
-- Primary constructors require C# 12.0 (net8.0+) 
-- Entity Framework Core 9.x requires net8.0+
+## Links
+
+- [NuGet](https://www.nuget.org/profiles/sunamo)
+- [GitHub](https://github.com/sunamo/PlatformIndependentNuGetPackages)
+- [Developer Site](https://sunamo.cz)
+- [Contact](mailto:radek.jancik@sunamo.cz)
+
+## License
+
+MIT

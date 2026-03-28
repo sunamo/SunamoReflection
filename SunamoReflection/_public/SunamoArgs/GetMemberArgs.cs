@@ -1,8 +1,12 @@
 namespace SunamoReflection._public.SunamoArgs;
 
+/// <summary>
+/// Arguments controlling which members to retrieve via reflection.
+/// </summary>
 public class GetMemberArgs
 {
-    public bool onlyPublic = true;
-    private bool toDelete = false;
+    /// <summary>
+    /// When true, only public members are retrieved.
+    /// </summary>
+    public bool IsOnlyPublic { get; set; } = true;
 }
-
