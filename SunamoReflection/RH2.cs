@@ -4,7 +4,12 @@ using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
 {
-    // When serializing ISymbol, execution may take unlimited time.
+    /// <summary>
+    /// Dumps an object as a string using the specified dump provider.
+    /// When serializing ISymbol, execution may take unlimited time.
+    /// </summary>
+    /// <param name="args">The dump arguments specifying the object, provider, and options.</param>
+    /// <returns>String representation of the object.</returns>
     public static string DumpAsString(DumpAsStringArgs args)
     {
         string? dump = null;
@@ -33,6 +38,11 @@ public partial class RH
         return args.Name + Environment.NewLine + dump;
     }
 
+    /// <summary>
+    /// Dumps an object using the Reflection provider.
+    /// </summary>
+    /// <param name="instance">The object to dump.</param>
+    /// <returns>Reflection-based string representation.</returns>
     public static string DumpAsReflection(object instance)
     {
         return DumpAsString(new DumpAsStringArgs { Provider = DumpProvider.Reflection, Object = instance });
@@ -53,6 +63,15 @@ public partial class RH
         return string.Join("-", sourceList);
     }
 
+    /// <summary>
+    /// Dumps a three-level nested dictionary as a formatted string.
+    /// </summary>
+    /// <typeparam name="TKey1">Type of the first-level key.</typeparam>
+    /// <typeparam name="TKey2">Type of the second-level key.</typeparam>
+    /// <typeparam name="TValue">Type of the list values.</typeparam>
+    /// <param name="operation">The operation label for the header.</param>
+    /// <param name="grouped">The nested dictionary to dump.</param>
+    /// <returns>Formatted multi-line string.</returns>
     public static string DumpAsString3Dictionary3<TKey1, TKey2, TValue>(string operation, Dictionary<TKey1, Dictionary<TKey2, List<TValue>>> grouped) where TKey1 : notnull where TKey2 : notnull
     {
         var stringBuilder = new StringBuilder();
@@ -73,6 +92,14 @@ public partial class RH
         return result;
     }
 
+    /// <summary>
+    /// Dumps a two-level nested dictionary as a formatted string.
+    /// </summary>
+    /// <typeparam name="TKey">Type of the dictionary key.</typeparam>
+    /// <typeparam name="TValue">Type of the list values.</typeparam>
+    /// <param name="operation">The operation label for the header.</param>
+    /// <param name="grouped">The nested dictionary to dump.</param>
+    /// <returns>Formatted multi-line string.</returns>
     public static string DumpAsString3Dictionary2<TKey, TValue>(string operation, Dictionary<TKey, List<TValue>> grouped) where TKey : notnull
     {
         var stringBuilder = new StringBuilder();
@@ -89,7 +116,13 @@ public partial class RH
         return result;
     }
 
-    // Returns FieldInfo objects so the caller can extract Name, Value, etc.
+    /// <summary>
+    /// Gets all constant fields defined on the specified type, optionally including non-public constants.
+    /// Returns FieldInfo objects so the caller can extract Name, Value, etc.
+    /// </summary>
+    /// <param name="type">The type to inspect.</param>
+    /// <param name="args">Optional arguments controlling public-only filtering.</param>
+    /// <returns>List of constant FieldInfo objects.</returns>
     public static List<FieldInfo> GetConsts(Type type, GetMemberArgs? args = null)
     {
         if (args == null)
@@ -104,6 +137,11 @@ public partial class RH
         return constants;
     }
 
+    /// <summary>
+    /// Gets all public static methods defined on the specified type including inherited.
+    /// </summary>
+    /// <param name="type">The type to inspect.</param>
+    /// <returns>List of public static methods.</returns>
     public static List<MethodInfo> GetMethods(Type type)
     {
         var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static |
@@ -111,12 +149,31 @@ public partial class RH
         return methods;
     }
 
+    /// <summary>
+    /// Sets the value of a property by name on an object instance.
+    /// </summary>
+    /// <param name="name">The property name.</param>
+    /// <param name="type">The type containing the property.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <param name="value">The value to set.</param>
+    /// <returns>Always null (set operation has no return value).</returns>
     public static object? SetValueOfProperty(string name, Type type, object instance, bool isIgnoringCase, object? value)
     {
         var properties = type.GetProperties();
         return SetValue(name, type, instance, properties, isIgnoringCase, value);
     }
 
+    /// <summary>
+    /// Sets a member value by name, searching in the provided member list.
+    /// </summary>
+    /// <param name="name">The member name.</param>
+    /// <param name="type">The type containing the member.</param>
+    /// <param name="instance">The object instance.</param>
+    /// <param name="members">The list of members to search.</param>
+    /// <param name="isIgnoringCase">Whether to ignore case when matching names.</param>
+    /// <param name="value">The value to set.</param>
+    /// <returns>Always null.</returns>
     public static object? SetValue(string name, Type type, object instance, IList members, bool isIgnoringCase, object? value)
     {
         return GetOrSetValue(name, type, instance, members, isIgnoringCase, SetValue, value);
@@ -137,6 +194,11 @@ public partial class RH
         return null;
     }
 
+    /// <summary>
+    /// Checks whether a named assembly exists in the current domain's referenced assemblies.
+    /// </summary>
+    /// <param name="value">The assembly name to search for (not full name).</param>
+    /// <returns>True if the assembly is referenced.</returns>
     public static bool ExistsAssemblyNotFullName(string value)
     {
         var entryAssembly = Assembly.GetEntryAssembly();
@@ -151,6 +213,12 @@ public partial class RH
 
     private static readonly List<string> allReferencedAssemblies = new();
 
+    /// <summary>
+    /// Gets all referenced assemblies recursively from the specified assembly.
+    /// </summary>
+    /// <param name="entryAssembly">The root assembly to start from.</param>
+    /// <param name="isUsingCache">Whether to use cached results from a previous call.</param>
+    /// <returns>List of all referenced assembly names.</returns>
     public static List<string> AllReferencedAssemblies(Assembly entryAssembly, bool isUsingCache = true)
     {
         if (!isUsingCache)
