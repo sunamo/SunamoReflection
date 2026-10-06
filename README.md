@@ -1,5 +1,10 @@
 # SunamoReflection
 
+## Short description
+
+Knihovna s pokročilými pomůckami pro reflexi, které zrychlují vývoj. Obsahuje Runner a testy.
+
+
 Advanced reflection for faster development
 
 ## Overview
