@@ -1,11 +1,22 @@
 namespace SunamoReflection;
 
+/// <summary>
+/// Represents the array traverse type.
+/// </summary>
 public class ArrayTraverse
 {
     private readonly int[] maxLengths;
 
+    /// <summary>
+    /// The position.
+    /// </summary>
     public int[] Position;
 
+    /// <summary>
+    /// Array traverse.
+    /// </summary>
+    /// <param name="array">The array.</param>
+    /// <returns>The array traverse result.</returns>
     public ArrayTraverse(Array array)
     {
         maxLengths = new int[array.Rank];
@@ -13,6 +24,10 @@ public class ArrayTraverse
         Position = new int[array.Rank];
     }
 
+    /// <summary>
+    /// Step.
+    /// </summary>
+    /// <returns>The step result.</returns>
     public bool Step()
     {
         for (var i = 0; i < Position.Length; ++i)

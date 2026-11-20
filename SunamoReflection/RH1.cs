@@ -4,6 +4,12 @@ using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
 {
+    /// <summary>
+    /// Dump as string 3.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="args">The args.</param>
+    /// <returns>The dump as string 3 result.</returns>
     public static string DumpAsString3(object instance, DumpAsStringHeaderArgsReflection? args = null)
     {
         if (args == null)
@@ -18,11 +24,24 @@ public partial class RH
         return DumpAsString(dumpArgs);
     }
 
+    /// <summary>
+    /// Get values of field.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <returns>The get values of field result.</returns>
     public static List<string> GetValuesOfField(object instance, params string[] onlyNames)
     {
         return GetValuesOfField(instance, onlyNames);
     }
 
+    /// <summary>
+    /// Get values of field.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <param name="isOnlyValues">The is only values.</param>
+    /// <returns>The get values of field result.</returns>
     public static List<string> GetValuesOfField(object instance, IList<string> onlyNames, bool isOnlyValues)
     {
         var type = instance.GetType();
@@ -40,6 +59,12 @@ public partial class RH
     }
 
     // This method was useful in usysu where StackOverflowException occurred.
+    /// <summary>
+    /// Print public properties recursively.
+    /// </summary>
+    /// <param name="stringBuilder">The string builder.</param>
+    /// <param name="type">The type.</param>
+    /// <param name="indent">The indent.</param>
     public static void PrintPublicPropertiesRecursively(StringBuilder stringBuilder, Type? type, string indent = "  ")
     {
         if (type == null)
@@ -72,6 +97,13 @@ public partial class RH
     }
 
     // Supports negation filters with "!" prefix in onlyNames.
+    /// <summary>
+    /// Get values of property 2.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <param name="isOnlyValues">The is only values.</param>
+    /// <returns>The get values of property 2 result.</returns>
     public static List<string> GetValuesOfProperty2(object instance, List<string> onlyNames, bool isOnlyValues)
     {
         var filterNames = onlyNames.ToList();
@@ -96,6 +128,16 @@ public partial class RH
         return values;
     }
 
+    /// <summary>
+    /// Get value.
+    /// </summary>
+    /// <param name="descriptor">The descriptor.</param>
+    /// <param name="isAllNegated">The is all negated.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <param name="filterNames">The filter names.</param>
+    /// <param name="instance">The instance.</param>
+    /// <param name="values">The values.</param>
+    /// <param name="isOnlyValues">The is only values.</param>
     public static void GetValue(MemberInfo descriptor, bool isAllNegated, List<string> onlyNames, List<string> filterNames, object instance, List<string> values, bool isOnlyValues)
     {
         var isAdding = true;
@@ -144,11 +186,32 @@ public partial class RH
         return null;
     }
 
+    /// <summary>
+    /// Get value.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="type">The type.</param>
+    /// <param name="instance">The instance.</param>
+    /// <param name="members">The members.</param>
+    /// <param name="isIgnoringCase">The is ignoring case.</param>
+    /// <param name="value">The value.</param>
+    /// <returns>The get value result.</returns>
     public static object? GetValue(string name, Type type, object instance, IList members, bool isIgnoringCase, object? value)
     {
         return GetOrSetValue(name, type, instance, members, isIgnoringCase, GetValue, value);
     }
 
+    /// <summary>
+    /// Get or set value.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="type">The type.</param>
+    /// <param name="instance">The instance.</param>
+    /// <param name="members">The members.</param>
+    /// <param name="isIgnoringCase">The is ignoring case.</param>
+    /// <param name="getOrSet">The get or set.</param>
+    /// <param name="value">The value.</param>
+    /// <returns>The get or set value result.</returns>
     public static object? GetOrSetValue(string name, Type type, object instance, IList members, bool isIgnoringCase, Func<object, MemberInfo[], object?, object?> getOrSet, object? value)
     {
         if (isIgnoringCase)
@@ -184,6 +247,11 @@ public partial class RH
             values.Add($"{name}: {value}");
     }
 
+    /// <summary>
+    /// Dump as object dumper net.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <returns>The dump as object dumper net result.</returns>
     public static string DumpAsObjectDumperNet(object instance)
     {
         return ObjectDumper.Dump(instance);

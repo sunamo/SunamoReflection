@@ -4,6 +4,11 @@ using PropertyDescriptor = YamlDotNet.Serialization.PropertyDescriptor;
 
 public partial class RH
 {
+    /// <summary>
+    /// Exists class.
+    /// </summary>
+    /// <param name="className">The class name.</param>
+    /// <returns>The exists class result.</returns>
     public static bool ExistsClass(string className)
     {
         var foundType = (
@@ -13,6 +18,11 @@ public partial class RH
         return foundType != null;
     }
 
+    /// <summary>
+    /// Copy object.
+    /// </summary>
+    /// <param name="input">The input.</param>
+    /// <returns>The copy object result.</returns>
     public static object? CopyObject(object? input)
     {
         if (input != null)
@@ -38,6 +48,12 @@ public partial class RH
     }
 
 #pragma warning disable SYSLIB0050
+    /// <summary>
+    /// Clone t.
+    /// </summary>
+    /// <typeparam name="T">The type T.</typeparam>
+    /// <param name="source">The source.</param>
+    /// <returns>The clone t result.</returns>
     public static T? Clone<T>(T source)
     {
         if (!typeof(T).IsSerializable)
@@ -49,6 +65,12 @@ public partial class RH
     }
 #pragma warning restore SYSLIB0050
 
+    /// <summary>
+    /// Get values of property or field.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <returns>The get values of property or field result.</returns>
     public static List<string> GetValuesOfPropertyOrField(object instance, params string[] onlyNames)
     {
         var values = new List<string>();
@@ -58,6 +80,12 @@ public partial class RH
     }
 
     // For more complex .NET objects, use GetValuesOfProperty2 instead.
+    /// <summary>
+    /// Get values of property.
+    /// </summary>
+    /// <param name="instance">The instance.</param>
+    /// <param name="onlyNames">The only names.</param>
+    /// <returns>The get values of property result.</returns>
     public static List<string> GetValuesOfProperty(object instance, params string[] onlyNames)
     {
         var properties = instance.GetType().GetProperties();
@@ -97,6 +125,11 @@ public partial class RH
         return values;
     }
 
+    /// <summary>
+    /// Copy properties.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="target">The target.</param>
     public void CopyProperties(object source, object target)
     {
         var targetType = target.GetType();
@@ -110,16 +143,31 @@ public partial class RH
         }
     }
 
+    /// <summary>
+    /// Full name of method.
+    /// </summary>
+    /// <param name="methodInfo">The method info.</param>
+    /// <returns>The full name of method result.</returns>
     public static string FullNameOfMethod(MethodInfo methodInfo)
     {
         return (methodInfo.DeclaringType?.FullName ?? string.Empty) + methodInfo.Name;
     }
 
+    /// <summary>
+    /// Full name of class ends dot.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns>The full name of class ends dot result.</returns>
     public static string FullNameOfClassEndsDot(Type type)
     {
         return type.FullName + ".";
     }
 
+    /// <summary>
+    /// Full name of executed code.
+    /// </summary>
+    /// <param name="method">The method.</param>
+    /// <returns>The full name of executed code result.</returns>
     public static string FullNameOfExecutedCode(MethodBase method)
     {
         var methodName = method.Name;
@@ -127,6 +175,12 @@ public partial class RH
         return SH.ConcatIfBeforeHasValue(typeName, ".", methodName, ":");
     }
 
+    /// <summary>
+    /// Get types in namespace.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    /// <param name="nameSpace">The name space.</param>
+    /// <returns>The get types in namespace result.</returns>
     public static IList<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
         var types = assembly.GetTypes();
@@ -136,6 +190,12 @@ public partial class RH
     // Better than loading assemblies directly from the running process is using Assembly.LoadFrom.
     // If you encounter "Could not load file or assembly System.Reflection.Metadata",
     // add System.Reflection.Metadata to both the calling and target projects.
+    /// <summary>
+    /// Get types in assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    /// <param name="contains">The contains.</param>
+    /// <returns>The get types in assembly result.</returns>
     public static IList<Type> GetTypesInAssembly(Assembly assembly, string contains)
     {
         var types = assembly.GetTypes();
