@@ -41,7 +41,7 @@ public partial class RH
     public static T? Clone<T>(T source)
     {
         if (!typeof(T).IsSerializable)
-            throw new Exception(XlfKeys.TheTypeMustBeSerializable + ". source");
+            throw new Exception("The type must be serializable" + ". source");
         if (ReferenceEquals(source, null))
             return default;
         ThrowEx.NotImplementedMethod();
